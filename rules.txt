@@ -1,0 +1,20 @@
+ 
+- matrice de 10 000 cases (format 10x100)
+- Surfaces : 
+        - rocher       proba : 10%
+        - herbes/rien  proba : 40%
+        - arbres       proba : 5%
+        - sable        proba : 30%
+        - fleurs       proba : 5%  
+        - (eau si le temps)
+- Obstacle indestructible et infranchissable : Arbre   
+-    "      destructible et infranchissable : rocher (avec pioche) 
+-    "      destructile et franchissable : fleurs (ramassable)     
+-    "      déplacable : caisse en bois     
+
+
+
+
+
+
+
