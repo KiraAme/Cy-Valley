@@ -9,10 +9,10 @@ typedef struct{
 
 
 void Init (void* pUserData, Screen* pScreen){
-  Model* pModel = (*Model)pUserData;
+  Model* pModel = (Model*)pUserData;
 }
-void Event (void* pUserData, Screen* pScreen, Event* pEvt){
-  Model* pModel = (*Model)pUserData;
+void event (void* pUserData, Screen* pScreen, Event* pEvt){
+  Model* pModel = (Model*)pUserData;
 }
 int Update (void* pUserData, Screen* pScreen, unsigned long deltaTime){
   
@@ -33,16 +33,16 @@ void Finish (void* pUserData){
 int main() {
   Model model;
   Callbacks cb;
-  cb->cbInit= Init;        
-  cb->cbEvent= Event;        
-  cb->cbUpdate= Update;
-  cb->cbDraw= Draw;
-  cb->cbFinish= Finish;
+  cb.cbInit= Init;        
+  cb.cbEvent= event;        
+  cb.cbUpdate= Update;
+  cb.cbDraw= Draw;
+  cb.cbFinish= Finish;
   
+
   
-  createGame(10, 30, &model, &cb, 0);
-  
-  
+  gameLoop(createGame(10, 30, &model, &cb, 0));
   
   return 0; 
 }
+
