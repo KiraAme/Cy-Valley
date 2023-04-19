@@ -25,3 +25,13 @@ typedef Struct{
   int push (vaut 0 ou 1);
   int gothrough (vaut 0 ou 1);
 } Surface;
+
+d'abord vérifier si la surface est franchissable (gothrough)
+ensuite si elle ne l'est pas verifier si c'est un rocher, un arbre ou une caisse
+ensuite demander quelle(s) action(s) faire (deplacer, casser ect)
+si c'est une fleur demander si on souhaite la ramasser 
+
+-----
+idée de quête pour debloquer la pioche: récupérer x nombre de fleurs
+-----
+ajouter une surface humain pour les quetes avec qui ont pourra interagir (ex: obtenir une quetes)
