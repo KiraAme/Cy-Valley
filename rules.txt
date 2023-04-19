@@ -23,7 +23,7 @@ typedef Struct{
   int break (vaut 0 ou 1);
   int take (vaut 0 ou 1);
   int push (vaut 0 ou 1);
-  int gothrough (vaut 0 ou 1);
+  int go_through (vaut 0 ou 1);
 } Surface;
 
 d'abord vérifier si la surface est franchissable (gothrough)
@@ -33,5 +33,39 @@ si c'est une fleur demander si on souhaite la ramasser
 
 -----
 idée de quête pour debloquer la pioche: récupérer x nombre de fleurs
+idée de quête: casser x rochers
+idée de quête: affronter x ennemis (si ennemis il y a)
 -----
 ajouter une surface humain pour les quetes avec qui ont pourra interagir (ex: obtenir une quetes)
+-----
+idée conditions de victoires:
+ -accomplir toutes les quêtes 
+ -avoir récupéré toutes les fleurs de la carte et détruit tous les rochers
+ -en cassant un rocher récupérer un objet (style 0,1% de chance d'obtention) qui ferait instant win
+ -éliminer tous les ennemis display sur la carte
+ -interagir pour la x-ieme fois avec le pnj ferait gagner
+-----
+idée conditions de defaite:
+ -plus de point de vie (classique)
+ -ne pas avoir fini toutes les quetes en x minutes
+ -obtenir un objet en cassant un rocher qui ferait instant lose (ex 0.01 chance d'obtention)
+-----
+
+idee de structure pour le joueur:
+
+typedef Struct{
+	float healthbar;
+	Inv inventory;( issue d'une structure Inv)
+	int quest_advancement (pour pouvoir utiliser un switch quand on interagit avec le pnj);
+} Player;
+
+idee de structure pour l'inventaire:
+
+typesef Struct{
+	int flower_num;
+	int have_pickaxe;
+	int item_1; ( en fonction de quels items on rajoute ect)
+	ect...
+} Inv;
+
+-----
