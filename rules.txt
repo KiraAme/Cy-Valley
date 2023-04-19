@@ -17,4 +17,11 @@
 
 
 
-
+----------
+type de structure pour les surfaces:
+typedef Struct{
+  int break (vaut 0 ou 1);
+  int take (vaut 0 ou 1);
+  int push (vaut 0 ou 1);
+  int gothrough (vaut 0 ou 1);
+} Surface;
