@@ -81,4 +81,4 @@ typedef Struct{
 idée pour perdre des hp:
  -quand on casse un rocher on peut prendre des degats ex 0.5 point de degats à 5% de chance
  -dégâts d'ennemis (si il y a)
- -
+ - tres faible taux mais possibilité de glisser et tomber quand le joueur bouge
