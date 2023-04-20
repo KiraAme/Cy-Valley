@@ -4,7 +4,7 @@
         - rocher       proba : 10%
         - herbes/rien  proba : 35%
         - arbres       proba : 5%
-        - sable        proba : 25%
+        - sable/terre        proba : 25%
         - fleurs       proba : 5%
 	- PNJ          proba : 1 seul pnj
         - (eau si le temps)
