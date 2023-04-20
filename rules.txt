@@ -1,5 +1,5 @@
  
-- matrice de 10 000 cases (format 10x100)
+- matrice de 10 000 cases (format 100x100)
 - Surfaces : 
         - rocher       proba : 10%
         - herbes/rien  proba : 40%
@@ -54,7 +54,7 @@ idée conditions de defaite:
 idee de structure pour le joueur:
 
 typedef Struct{
-	float healthbar;
+	float health_point;
 	Inv inventory;( issue d'une structure Inv)
 	int quest_advancement (pour pouvoir utiliser un switch quand on interagit avec le pnj);
 } Player;
@@ -69,3 +69,6 @@ typesef Struct{
 } Inv;
 
 -----
+idée pour perdre des hp:
+ -quand on casse un rocher on peut prendre des degats ex 0.5 point de degats à 5% de chance
+ 
