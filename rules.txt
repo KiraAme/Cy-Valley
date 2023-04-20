@@ -2,10 +2,11 @@
 - matrice de 10 000 cases (format 100x100)
 - Surfaces : 
         - rocher       proba : 10%
-        - herbes/rien  proba : 40%
+        - herbes/rien  proba : 35%
         - arbres       proba : 5%
-        - sable        proba : 30%
-        - fleurs       proba : 5%  
+        - sable        proba : 25%
+        - fleurs       proba : 5%
+	- PNJ          proba : 1 seul pnj
         - (eau si le temps)
 - Obstacle indestructible et infranchissable : Arbre   
 -    "      destructible et infranchissable : rocher (avec pioche) 
@@ -13,7 +14,7 @@
 -    "      déplacable : caisse en bois     
 
 
-
+"au moins 2 élèments de l'inventaire sont limités en nombres"
 
 
 
@@ -37,6 +38,7 @@ idée de quête: casser x rochers
 idée de quête: affronter x ennemis (si ennemis il y a)
 -----
 ajouter une surface humain pour les quetes avec qui ont pourra interagir (ex: obtenir une quetes)
++ ajouter une surface maison où il y aurait le pnj et en se rendant à cette maison, on pourrait soit interagir avec le pnj, soit déposer des objets dans un coffre (un inventaire externe fixe et utilisable uniquement lorsque l'on est sur la surface maison)(à voir si c'est possible)
 -----
 idée conditions de victoires:
  -accomplir toutes les quêtes 
@@ -82,3 +84,16 @@ idée pour perdre des hp:
  -quand on casse un rocher on peut prendre des degats ex 0.5 point de degats à 5% de chance
  -dégâts d'ennemis (si il y a)
  - tres faible taux mais possibilité de glisser et tomber quand le joueur bouge
+ 
+ -----
+ Idée pour gagner des hp :
+   - Récolter des baies 
+   - Manger des fleurs (on pourrait déclarer un int avec un rand et si ce chiffre est compris entre un certain encadrement (proba), la fleur est commestible est donc gain de hp) 
+   - grâce à l'eau (s'il y a)
+ -----
+ Idée pour l'inventaire :
+   - Taille de l'inventaire : entre 10 et 30
+   - fleurs (limite de 10 fleurs à la fois)
+   - baies (s'il y a)
+   - pioche
+   - roche (limite de 8 roches à la fois
