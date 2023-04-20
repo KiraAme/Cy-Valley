@@ -68,7 +68,17 @@ typesef Struct{
 	ect...
 } Inv;
 
+idee de structure pour les ennemis 
+
+typedef Struct{
+	int ad;
+	float health_point;
+	char* weapon;
+	ect;
+} Mob;
+
 -----
 idée pour perdre des hp:
  -quand on casse un rocher on peut prendre des degats ex 0.5 point de degats à 5% de chance
- 
+ -dégâts d'ennemis (si il y a)
+ -
