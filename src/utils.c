@@ -71,7 +71,7 @@ int checkEvent(GameData* pGame){
         flag |= (size==5) && ((value & 0xFFFFFF00FF) == EXT_FN2); 
         flag |= (size==2) && ((value & 0xFF00      ) == EXT_FN3); 
         
-        //* // DEBUG
+        /* // DEBUG
         debug("|%3d| => [%0p]\n", ch, value); 
         if( flag ){
             debug("===>>>\n");
