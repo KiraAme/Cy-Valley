@@ -1,40 +1,34 @@
-#include "inc/libGameRGR2.h"
-
-typedef struct{
-  int x;
-  int y;
-  int arrow_position;
-} Model;
-
+//export LD_LIBRARY_PATH=lib
+#include "jeu.h"
 
 void init(void* pUserData, Screen* pScreen){
-  Model* pModel = (Model*)pUserData;
-  pModel->x = 15;
-  pModel->y = 15;
-  pModel->arrow_position = 6;
-  setColorPair(1, 11, 0);
-  setColorPair(2, 7, 0);
+	Model* pModel = (Model*)pUserData;
+	
+	//Player's coordinates when spawned	
+	pModel->x = 15;
+	pModel->y = 15;
+	
+	//The y arrow's coordinates 
+	pModel->arrow_position = 6;
+	
+	//Initialisation of colors id
+	setColor(1, 255, 255, 0);
+	setColor(2, 255, 255, 255);
+	setColorPair(1, 1, 0);
+	setColorPair(2, 2, 0);
+	
+	//Game status (1 = Main menu, 2 = Settings, 3 = Load menu, 4 = New game or load, 5 = Game)
+	pModel->game_status = 1;
 }
 
 void event(void* pUserData, Screen* pScreen, Event* pEvt){
-  Model* pModel = (Model*)pUserData;
-  if(pEvt->code == KEY_ARROW_DOWN){
-  	if(pModel->arrow_position < 17){
-  		drawText(pScreen, 2, pModel->arrow_position, " ", 0);
-  		pModel->arrow_position+=6;
-  	}
-  }
-  if(pEvt->code == KEY_ARROW_UP){
-  	if(pModel->arrow_position > 6){
-  		drawText(pScreen, 2, pModel->arrow_position, " ", 0);
-  		pModel->arrow_position-=6;
-  	}
-  }
+	Model* pModel = (Model*)pUserData;
+	menu(pScreen, pEvt, pModel);
 }
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
-  
-  return 0;
+	
+	return 0;
 }
 
 void draw(void* pUserData, Screen* pScreen){
@@ -73,7 +67,7 @@ void draw(void* pUserData, Screen* pScreen){
 }
 
 void finish(void* pUserData){
-  
+	
 }
 
 
@@ -82,17 +76,17 @@ void finish(void* pUserData){
 
 
 int main() {
-  Model model;
-  Callbacks cb;
-  cb.cbInit= init;        
-  cb.cbEvent= event;        
-  cb.cbUpdate= update;
-  cb.cbDraw= draw;
-  cb.cbFinish= finish;
-  
-
-  
-  gameLoop(createGame(50, 50, &model, &cb, 0));
-  
-  return 0; 
+	Model model;
+	Callbacks cb;
+	cb.cbInit= init;        
+	cb.cbEvent= event;        
+	cb.cbUpdate= update;
+	cb.cbDraw= draw;
+	cb.cbFinish= finish;
+	
+	
+	
+	gameLoop(createGame(50, 50, &model, &cb, 0));
+	  
+	return 0; 
 }

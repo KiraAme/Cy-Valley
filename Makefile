@@ -7,6 +7,10 @@ SRC_DIR  = src
 LIB_DIR  = lib
 TEST_EXE = test
 CURSES   = ncursesw
+SRC=$(wildcard *.c)
+OBJ=$(SRC:.c=.o)
+BUILD_DIR=build
+OBJ2=$(addprefix $(BUILD_DIR)/, $(OBJ))
 
 #-----------------------------------------
 # REBUILD
@@ -32,7 +36,13 @@ $(LIB_DIR)/lib$(LIB).so : $(LIB_DIR)/lib$(LIB).o $(LIB_DIR)/utils.o $(LIB_DIR)/e
 #-----------------------------------------
 # MAIN
 #-----------------------------------------
-$(TEST_EXE) : $(LIB_DIR)/lib$(LIB).so test.c
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)/
+
+$(BUILD_DIR)/%.o: %.c jeu.h $(BUILD_DIR)
+	gcc -c $< -o $@
+
+$(TEST_EXE) : $(LIB_DIR)/lib$(LIB).so $(OBJ2)
 	@echo "Regenerating [$@]..."
 	@gcc test.c -o $@ -I$(INC_DIR) -L$(LIB_DIR) -l$(CURSES) -l$(LIB)
 
