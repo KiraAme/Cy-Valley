@@ -95,7 +95,7 @@ void draw(void* pUserData, Screen* pScreen){
 	  }
 	}
 	for(pModel->x=0; pModel->x<MSIZE; pModel->x++){
-	  for(pModel->y; pModel->y<MSIZE; pModel->y++){
+	  for(pModel->y=0; pModel->y<MSIZE; pModel->y++){
 	    printf("%d", map[pModel->x][pModel->y]);
 	  }
 	  printf("\n");
