@@ -20,6 +20,7 @@ all : $(TEST_EXE)
 #-----------------------------------------
 # LIB RGR
 #-----------------------------------------
+
 $(LIB_DIR)/error.o : $(SRC_DIR)/error.c $(INC_DIR)/lib$(LIB).h $(INC_DIR)/local.h
 	@gcc -c $< -o $@ -I$(INC_DIR) -fPIC
 
@@ -29,22 +30,20 @@ $(LIB_DIR)/utils.o : $(SRC_DIR)/utils.c $(INC_DIR)/lib$(LIB).h $(INC_DIR)/local.
 $(LIB_DIR)/lib$(LIB).o : $(SRC_DIR)/lib$(LIB).c $(INC_DIR)/lib$(LIB).h $(INC_DIR)/local.h
 	@gcc -c $< -o $@ -I$(INC_DIR) -fPIC
 
-$(LIB_DIR)/lib$(LIB).so : $(LIB_DIR)/lib$(LIB).o $(LIB_DIR)/utils.o $(LIB_DIR)/error.o 
+$(LIB_DIR)/lib$(LIB).so : $(LIB_DIR)/lib$(LIB).o $(LIB_DIR)/utils.o $(LIB_DIR)/error.o
 	@echo "Regenerating [$@]..."
 	@gcc $^ -o $@ -shared -fPIC -I$(INC_DIR) -l$(CURSES)
 	
 #-----------------------------------------
 # MAIN
 #-----------------------------------------
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)/
 
 $(BUILD_DIR)/%.o: %.c jeu.h $(BUILD_DIR)
 	gcc -c $< -o $@
 
-$(TEST_EXE) : $(LIB_DIR)/lib$(LIB).so $(OBJ2)
+$(TEST_EXE) : $(OBJ2) $(LIB_DIR)/lib$(LIB).so
 	@echo "Regenerating [$@]..."
-	@gcc test.c -o $@ -I$(INC_DIR) -L$(LIB_DIR) -l$(CURSES) -l$(LIB)
+	@gcc $^ -o $@ -I$(INC_DIR) -L$(LIB_DIR) -l$(CURSES) -l$(LIB)
 
 #-----------------------------------------
 # RUN
