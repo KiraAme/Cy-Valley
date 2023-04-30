@@ -1,12 +1,24 @@
 #include "inc/libGameRGR2.h"
 
 #define MSIZE 100
+
 typedef struct{
   int x;
   int y;
   int arrow_position;
 } Model;
 
+double perlin(double x, double y){  //Algo du bruit de Perlin
+  int n= (int)x + (int)y*57;
+  n = (n << 13) ^ n;
+  return (1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
+  /*for(int x = 0; x<MSIZE; x++){
+    for(int y=0; y<MSIZE; y++){
+      printf("%-4d", (int)(noise[x][y] * 100));
+    }
+    printf("\n");
+  }*/
+}
 
 void init(void* pUserData, Screen* pScreen){
   Model* pModel = (Model*)pUserData;
@@ -73,41 +85,53 @@ void draw(void* pUserData, Screen* pScreen){
 	drawText(pScreen, 2, pModel->arrow_position, "➡️", 0);*/
 	///
 	srand(time(NULL));
-	int map[MSIZE][MSIZE];  //matrix : rock (20%) = 0; grass (35%) = 1; trees (5%) = 2; dirt  (25%) = 3; flowers (10%)= 4; (i changed the proba just to test smthg)
-	for(int n=0; n<MSIZE; n++){
-	  for(int m=0; m<MSIZE; m++){
-	  int num = rand()%100;
-	    if(num<65){
-	      map[n][m]=1;
-	    }
-	    else if(num<75){
-	      map[n][m]=3;
-	    }
-	    else if(num<80){
-	      map[n][m]=0;
-	    }
-	    else if(num<90){
-	      map[n][m]=4;
-	    }
-	    else if(num<95){
-	      map[n][m]=2;
-	    }
-	  }
-	}
-	for(pModel->x=0; pModel->x<MSIZE; pModel->x++){
-	  for(pModel->y=0; pModel->y<MSIZE; pModel->y++){
-	    printf("%d", map[pModel->x][pModel->y]);
-	  }
-	  printf("\n");
-	}
+	int map[MSIZE][MSIZE];  //matrix : rock (20%) = 1; grass (35%) = 0; trees (5%) = 3; dirt  (25%) = 2; flowers (10%)= 4; (i changed the proba just to test smthg); s = surfaces
+
+	 const char* SURFACE_TYPES[] = {  //énumération pour stocker les 5 surfaces
+	   "🪨",
+	   "🌱",
+	   "🌳",
+	   "🏜️",
+	   "🌷"
+	 };
+	 double SURFACE_PROBABILITIES[] = { //proba des 5 surfaces (j'ai changé les proba juste pour un test)
+	   0.25,
+	   0.25,
+	   0.2,
+	   0.2,
+	   0.1
+	 };
+	//génération de la map
+	 for(int x=0; x<MSIZE; x++){
+	   for(int y=0; y<MSIZE; y++){
+	     double noise = perlin(x / (double)MSIZE, y / (double)MSIZE); //calcul bruit de Perlin
+	     int surface_type = -1;
+	     double prob_sum = 0.0;
+	     for(int i=0; i<sizeof(SURFACE_PROBABILITIES) / sizeof(double); i++){
+	       prob_sum += SURFACE_PROBABILITIES[i];
+	       if (noise < prob_sum){
+	         surface_type = i;
+	         break;
+	       }
+	     }
+	     if (surface_type == -1){
+	       surface_type = sizeof(SURFACE_PROBABILITIES) / sizeof(double) - 1;
+	     }
+	     map[x][y] = surface_type;
+	   }
+	 }
+	//Affichage de la map
+	 for (int y=0; y<MSIZE; y++){
+	   for(int x=0; x<MSIZE; x++){
+	     printf("%-7s", SURFACE_TYPES[map[x][y]]);
+	   }
+	   printf("\n");
+	 }
 }
 
 void finish(void* pUserData){
   
 }
-
-
-
 
 
 
