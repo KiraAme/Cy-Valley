@@ -10,6 +10,7 @@
     #include "keys.h"
     #include <stdlib.h>
     #include <time.h>
+    #include <math.h>
 
     //------------------------------
     // CONSTANTS
