@@ -23,7 +23,22 @@ void init(void* pUserData, Screen* pScreen){
 
 void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	Model* pModel = (Model*)pUserData;
-	menu(pScreen, pEvt, pModel);
+	if(pModel->game_status!=5){
+		menu(pScreen, pEvt, pModel);
+	}
+	/*switch(pModel->game_status){
+		case 1:
+			menu(pScreen, pEvt, pModel);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			menu(pScreen, pEvt, pModel);
+			break;
+		case 5:
+	}*/
 }
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
@@ -44,35 +59,12 @@ void draw(void* pUserData, Screen* pScreen){
 			}
 		}	
 	}*/
-	for(int k=5; k<18; k+=6){
-		if(k+1 == pModel->arrow_position){
-			id = 1;
-		}
-		drawText(pScreen, 5, k, "|", id);
-		drawText(pScreen, 5, k+1, "|", 0);
-		drawText(pScreen, 5, k+2, "|", 0);
-		drawLine(pScreen, 6, k-1, 25, '-', 0);
-		drawLine(pScreen, 6, k+3, 25, '-', 0);
-		drawText(pScreen, 31, k, "|", 0);
-		drawText(pScreen, 31, k+1, "|", 0);
-		drawText(pScreen, 31, k+2, "|", 0);
-		if(k+1 == pModel->arrow_position){
-			id = 2;
-		}
-	}
-	drawText(pScreen, 16, 6, "Play", 1);
-	drawText(pScreen, 14, 12, "Settings", 0);
-	drawText(pScreen, 16, 18, "Quit", 0);
-	drawText(pScreen, 2, pModel->arrow_position, "➡️", 0);
+	draw_menu(pScreen, pModel, id, pModel->game_status);
 }
 
 void finish(void* pUserData){
 	
 }
-
-
-
-
 
 
 int main() {
@@ -86,7 +78,7 @@ int main() {
 	
 	
 	
-	gameLoop(createGame(50, 50, &model, &cb, 0));
+	gameLoop(createGame(200, 200, &model, &cb, 0));
 	  
 	return 0; 
 }
