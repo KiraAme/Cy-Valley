@@ -85,13 +85,23 @@ void replaceWithBiomes(float tab[100][100], char *map[100][100]){
 	for(int i = 0; i < 100; i++){
 		for (int j = 0; j < 100; j++){
 			if(tab[i][j] == 0) {
-				map[i][j] = "🌱"; // Plaine
+				map[i][j] = "🌱"; // Plain
 			}
 			else if(tab[i][j] == 1 || tab[i][j] == 2) {
-				map[i][j] = "⏳"; // Plage
+				map[i][j] = "⏳"; // Beach
 			}
 			else{
-				map[i][j] = "💧"; // Océan
+				map[i][j] = "💧"; // Lake
+			}
+		}
+	}
+}
+
+void replaceWithBiomes2(char *map[100][100]){
+	for(int i = 0; i < 100; i++){
+		for (int j = 0; j < 100; j++){
+			if((map[i][j] == "🌱" || map[i][j] == "⏳") && (rand() % 100 < 5)){
+				map[i][j] = "🪨"; // Plain
 			}
 		}
 	}

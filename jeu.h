@@ -22,6 +22,7 @@ double dot_product(double x1, double y1, double x2, double y2);
 double smoothstep(double t);
 double noise(double x, double y);
 void replaceWithBiomes(float tab[100][100], char *map[100][100]);
+void replaceWithBiomes2(char *map[100][100]);
 
 void menu(Screen* pScreen, Event* pEvt, Model* pModel);
 void draw_menu(Screen* pScreen, Model* pModel, int id, char status);

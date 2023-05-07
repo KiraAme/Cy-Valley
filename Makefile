@@ -43,7 +43,7 @@ $(BUILD_DIR)/%.o: %.c jeu.h $(BUILD_DIR)
 
 $(TEST_EXE) : $(OBJ2) $(LIB_DIR)/lib$(LIB).so
 	@echo "Regenerating [$@]..."
-	@gcc $^ -o $@ -I$(INC_DIR) -L$(LIB_DIR) -l$(CURSES) -l$(LIB)
+	@gcc $^ -o $@ -I$(INC_DIR) -L$(LIB_DIR) -l$(CURSES) -l$(LIB) -lm
 
 #-----------------------------------------
 # RUN
