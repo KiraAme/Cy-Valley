@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TABLE_SIZE 256
+#define TABLE_SIZE  256
+#define CAMERA_SIZE 21
 
 typedef struct{
   char *name;

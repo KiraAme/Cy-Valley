@@ -48,6 +48,11 @@ void init(void* pUserData, Screen* pScreen){
 	}
 	replaceWithBiomes(pModel->map, pModel->map2);
 	replaceWithBiomes2(pModel->map2);
+	while(pModel->map2[10+pModel->x][10+pModel->y].go_through!=1){ 
+		//debug("+");
+		pModel->map2[10+pModel->x][10+pModel->y++];
+	}
+	
 }
 
 void event(void* pUserData, Screen* pScreen, Event* pEvt){
@@ -57,36 +62,36 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	}
 	else{
 		if(pEvt->code == KEY_ARROW_DOWN){
-			if(pModel->y<80 && pModel->map2[pModel->x+9][pModel->y+10].go_through){	
+			if(pModel->y<80 && pModel->map2[pModel->x+10][pModel->y+11].go_through){	
 	  			pModel->y++;
 	  					
 	  		}
 		}
 		if(pEvt->code == KEY_ARROW_UP){
-			if(pModel->y>0 && pModel->map2[pModel->x+9][pModel->y+8].go_through){
+			if(pModel->y>0 && pModel->map2[pModel->x+10][pModel->y+9].go_through){
 	  			pModel->y--;
 	  		}
 		}
 		if(pEvt->code == KEY_ARROW_RIGHT){
-			if(pModel->x<80 && pModel->map2[pModel->x+10][pModel->y+9].go_through){
+			if(pModel->x<80 && pModel->map2[pModel->x+11][pModel->y+10].go_through){
 	  			pModel->x++;
 	  		}
 			
 		}
 		if(pEvt->code == KEY_ARROW_LEFT){
-			if(pModel->x>0 && pModel->map2[pModel->x+8][pModel->y+9].go_through){
+			if(pModel->x>0 && pModel->map2[pModel->x+9][pModel->y+10].go_through){
 	  			pModel->x--;
 	  		}
 		}
 	}
+	
 	clear();
 }
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
 	
-	return 0;
+	return 0;   	
 }
-
 void draw(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
 	int id = 2;
@@ -94,13 +99,15 @@ void draw(void* pUserData, Screen* pScreen){
 		draw_menu(pScreen, pModel, id, pModel->game_status);
 	}
 	else{
-		for(int i=1; i<20; i++){
-			for(int j=1; j<20; j++){
-				if(i==10 && j==10){
-				drawText(pScreen, i, j, "🐰", 0);
+		for(int i=0; i<CAMERA_SIZE; i++){
+			for(int j=0; j<CAMERA_SIZE; j++){
+				int i2 = i + (pScreen->width-CAMERA_SIZE)/2;
+				int j2 = j + (pScreen->height-CAMERA_SIZE)/2;
+				if(i==CAMERA_SIZE/2 && j==CAMERA_SIZE/2){
+					drawText(pScreen, i2, j2, "🐰", 0);
 				}
 				else{
-					drawText(pScreen, i, j, pModel->map2[i-1+pModel->x][j-1+pModel->y].name, 0);
+					drawText(pScreen, i2, j2, pModel->map2[i+pModel->x][j+pModel->y].name, 0);
 				}
 				
 			}
@@ -124,7 +131,7 @@ int main() {
 	
 	
 	
-	gameLoop(createGame(100, 100, &model, &cb, 0));
+	gameLoop(createGame(100, 50, &model, &cb, 0));
 	  
 	return 0; 
 }
