@@ -1,10 +1,6 @@
 #include "jeu.h"
-#define TABLE_SIZE 256
 
-int permutation[TABLE_SIZE];
-double gradient[TABLE_SIZE][2];
-
-void initialize_permutation_table(){
+void initialize_permutation_table(int permutation[]){
     int i, j, tmp;
 
     // Fill the permutation table with values from 0 to 255
@@ -21,7 +17,7 @@ void initialize_permutation_table(){
     }
 }
 
-void initialize_gradient_table(){
+void initialize_gradient_table(double gradient[TABLE_SIZE][2]){
     int i;
 
     for (i = 0; i < TABLE_SIZE; i++) {
@@ -42,7 +38,7 @@ double smoothstep(double t){
     return t * t * (3 - 2 * t);
 }
 
-double noise(double x, double y){
+double noise(double x, double y, int permutation[], double gradient[TABLE_SIZE][2]){
     int x0 = floor(x);
     int x1 = x0 + 1;
     int y0 = floor(y);

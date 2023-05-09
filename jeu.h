@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define TABLE_SIZE 256
+
 typedef struct{
   int x;
   int y;
@@ -16,11 +18,11 @@ typedef struct{
 } Model;
 
 
-void initialize_permutation_table();
-void initialize_gradient_table();
+void initialize_permutation_table(int permutation[]);
+void initialize_gradient_table(double gradient[TABLE_SIZE][2]);
 double dot_product(double x1, double y1, double x2, double y2);
 double smoothstep(double t);
-double noise(double x, double y);
+double noise(double x, double y, int permutation[], double gradient[TABLE_SIZE][2]);
 void replaceWithBiomes(float tab[100][100], char *map[100][100]);
 void replaceWithBiomes2(char *map[100][100]);
 

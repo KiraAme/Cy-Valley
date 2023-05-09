@@ -21,15 +21,20 @@ void init(void* pUserData, Screen* pScreen){
 	pModel->game_status = 1;
 	
 	//map creation
+	int permutation[TABLE_SIZE];
+	double gradient[TABLE_SIZE][2];
+	
 	srand(time(NULL));
 	pModel->seed = rand();
 	srand(pModel->seed);
-	initialize_permutation_table();
-	initialize_gradient_table();
+	
+	initialize_permutation_table(permutation);
+	initialize_gradient_table(gradient);
+	
 	double i, j;
 	for(i=0; i<100; i++){
 		for(j=0; j<100; j++){
-			pModel->map[(int)i][(int)j] = (int)noise(i/15, j/15);
+			pModel->map[(int)i][(int)j] = (int)noise(i/15, j/15, permutation, gradient);
 			/*if(i%2==0){
 				pModel->map2[i][j]="💧";
 			}
