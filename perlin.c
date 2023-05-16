@@ -1,4 +1,4 @@
-#include "game.h"
+#include "jeu.h"
 
 void initialize_permutation_table(int permutation[]){
     int i, j, tmp;
@@ -86,16 +86,22 @@ void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP
 	plain.take=1;
 	plain.push=0;
 	plain.go_through=1;
+	plain.npc1.is_npc=0;
+	plain.npc1.flower_num=0;
 	beach.name="⏳";
 	beach.brk=0;
 	beach.take=0;
 	beach.push=0;
 	beach.go_through=1;
+	beach.npc1.is_npc=0;
+	beach.npc1.flower_num=0;
 	lake.name="💧";
 	lake.brk=0;
 	lake.take=0;
 	lake.push=0;
 	lake.go_through=0;
+	lake.npc1.is_npc=0;
+	lake.npc1.flower_num=0;
 	for(int i = 0; i < SIZEMAP; i++){
 		for (int j = 0; j < SIZEMAP; j++){
 			if(tab[i][j] == 0) {
@@ -112,36 +118,29 @@ void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP
 }
 
 void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
-	Surface plain;
-	Surface beach;
-	Surface lake;
 	Surface rock;
-	plain.name="🌱";
-	plain.brk=0;
-	plain.take=1;
-	plain.push=0;
-	plain.go_through=1;
-	beach.name="⏳";
-	beach.brk=0;
-	beach.take=0;
-	beach.push=0;
-	beach.go_through=1;
-	lake.name="💧";
-	lake.brk=0;
-	lake.take=0;
-	lake.push=0;
-	lake.go_through=0;
+	Surface farmer;
 	rock.name="🪨";
 	rock.brk=1;
 	rock.take=0;
 	rock.push=0;
 	rock.go_through=0;
-	for(int i = 0; i <SIZEMAP; i++){
+	rock.npc1.is_npc=0;
+	rock.npc1.flower_num=0;
+	farmer.name="👨‍🌾";
+	farmer.brk=0;
+	farmer.take=0;
+	farmer.push=0;
+	farmer.go_through=1;
+	farmer.npc1.is_npc=1;
+	farmer.npc1.flower_num=0;
+	for(int i = 0; i < SIZEMAP; i++){
 		for (int j = 0; j < SIZEMAP; j++){
 			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % SIZEMAP < 5)){
-				map[i][j] = rock; // Plain
+				map[i][j] = rock; // Rock
 			}
 		}
 	}
+	map[SIZEMAP/2-1][SIZEMAP/2-1]=farmer;
 }
 

@@ -1,4 +1,4 @@
-#include "game.h"
+#include "jeu.h"
 
 void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 	if(pEvt->code == KEY_ARROW_DOWN){
