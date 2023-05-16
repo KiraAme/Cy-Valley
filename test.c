@@ -1,152 +1,156 @@
-#include "inc/libGameRGR2.h"
-
-#define MSIZE 100
-
-typedef struct{
-  int x;
-  int y;
-  int arrow_position;
-} Model;
-
-double perlin(double x, double y){  //Algo du bruit de Perlin
-  int n= (int)x + (int)y*57;
-  n = (n << 13) ^ n;
-  return (1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
-  /*for(int x = 0; x<MSIZE; x++){
-    for(int y=0; y<MSIZE; y++){
-      printf("%-4d", (int)(noise[x][y] * 100));
-    }
-    printf("\n");
-  }*/
-}
+//export LD_LIBRARY_PATH=lib
+#include "jeu.h"
 
 void init(void* pUserData, Screen* pScreen){
-  Model* pModel = (Model*)pUserData;
-  pModel->x = 15;
-  pModel->y = 15;
-  pModel->arrow_position = 6;
-  setColorPair(1, 11, 0);
-  setColorPair(2, 7, 0);
+	Model* pModel = (Model*)pUserData;
+	
+	//Player's coordinates when spawned	
+	pModel->x = 50;
+	pModel->y = 50;
+	pModel->cam_x = pModel->x-10;
+	pModel->cam_y = pModel->y-10;
+	
+	//The y arrow's coordinates 
+	pModel->arrow_position = 6;
+	
+	//Initialisation of colors id
+	setColor(1, 255, 255, 0);
+	setColor(2, 255, 255, 255);
+	setColorPair(1, 1, 0);
+	setColorPair(2, 2, 0);
+	
+	//Game status (1 = Main menu, 2 = Settings, 3 = Load menu, 4 = New game or load, 5 = Game)
+	pModel->game_status = 1;
+	
+	//map creation
+	int permutation[TABLE_SIZE];
+	double gradient[TABLE_SIZE][2];
+	
+	srand(time(NULL));
+	pModel->seed = rand();
+	srand(pModel->seed);
+	
+	initialize_permutation_table(permutation);
+	initialize_gradient_table(gradient);
+	
+	double i, j;
+	for(i=0; i<100; i++){
+		for(j=0; j<100; j++){
+			pModel->map[(int)i][(int)j] = (int)noise(i/15, j/15, permutation, gradient);
+			/*if(i%2==0){
+				pModel->map2[i][j]="💧";
+			}
+			else if(j%2==0){
+				pModel->map2[i][j]="🌱";
+			}
+			else{
+				pModel->map2[i][j]="⏳";
+			}*/
+		}
+	}
+	replaceWithBiomes(pModel->map, pModel->map2);
+	replaceWithBiomes2(pModel->map2);
+	while(pModel->map2[pModel->x][pModel->y].go_through!=1){ 
+		//debug("+");
+		pModel->map2[pModel->x][pModel->y++];
+	}
+	
 }
 
 void event(void* pUserData, Screen* pScreen, Event* pEvt){
-  Model* pModel = (Model*)pUserData;
-  if(pEvt->code == KEY_ARROW_DOWN){
-  	if(pModel->arrow_position < 17){
-  		drawText(pScreen, 2, pModel->arrow_position, " ", 0);
-  		pModel->arrow_position+=6;
-  	}
-  }
-  if(pEvt->code == KEY_ARROW_UP){
-  	if(pModel->arrow_position > 6){
-  		drawText(pScreen, 2, pModel->arrow_position, " ", 0);
-  		pModel->arrow_position-=6;
-  	}
-  }
+	Model* pModel = (Model*)pUserData;
+	if(pModel->game_status!=5){
+		menu(pScreen, pEvt, pModel);	
+	}
+	else{
+		if(pEvt->code == KEY_ARROW_DOWN){
+			if(pModel->cam_y<79 && pModel->map2[pModel->x][pModel->y+1].go_through && (pModel->x - pModel->cam_x) == 10 && (pModel->y - pModel->cam_y) == 10){	
+	  			pModel->y++;
+	  			pModel->cam_y++;
+	  		}
+	  		else if(pModel->y<100 && pModel->map2[pModel->x][pModel->y+1].go_through){
+				pModel->y++;
+			}
+		}
+		if(pEvt->code == KEY_ARROW_UP){
+			if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through){
+	  			pModel->y--;
+	  			pModel->cam_y--;
+	  		}
+	  		else if(pModel->y>0 && pModel->map2[pModel->x-1][pModel->y].go_through){
+				pModel->y--;
+			}
+		}
+		if(pEvt->code == KEY_ARROW_RIGHT){
+			if(pModel->cam_x<79 && pModel->map2[pModel->x+1][pModel->y].go_through){	
+	  			pModel->x++;
+	  			pModel->cam_x++;
+	  		}
+	  		else if(pModel->x<100 && pModel->map2[pModel->x+1][pModel->y].go_through){
+				pModel->x++;
+			}
+			
+		}
+		if(pEvt->code == KEY_ARROW_LEFT){
+			if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through){
+	  			pModel->x--;
+	  			//pModel->cam_x--;
+	  		}
+	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].go_through){
+				pModel->x++;
+			}
+		}
+	}
+	
+	clear();
 }
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
-  
-  return 0;
+	
+	return 0;   	
 }
-
 void draw(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
 	int id = 2;
-	/*for(int i=10; i<21; i++){
-		for(int j=10; j<21; j++){
-			if(i==15 && j==15){
-				drawText(pScreen, i, j, "🐰", 0);
+	if(pModel->game_status!=5){
+		draw_menu(pScreen, pModel, id, pModel->game_status);
+	}
+	else{
+		for(int i=0; i<CAMERA_SIZE; i++){
+			for(int j=0; j<CAMERA_SIZE; j++){
+				int dif_x = pModel->x - pModel->cam_x - 10;
+				int dif_y = pModel->y - pModel->cam_y - 10;
+				int i2 = i + (pScreen->width-CAMERA_SIZE)/2;
+				int j2 = j + (pScreen->height-CAMERA_SIZE)/2;
+				if(i==CAMERA_SIZE/2 + dif_x && j==CAMERA_SIZE/2 + dif_y){
+					drawText(pScreen, i2, j2, "🐰", 0);
+				}
+				else{
+					drawText(pScreen, i2, j2, pModel->map2[i+pModel->cam_x][j+pModel->cam_y].name, 0);
+				}
+				
 			}
-			else{
-				drawText(pScreen, i, j, "🌱", 0);
-			}
-		}	
-	}*/
-	/*for(int k=5; k<18; k+=6){
-		if(k+1 == pModel->arrow_position){
-			id = 1;
-		}
-		drawText(pScreen, 5, k, "|", id);
-		drawText(pScreen, 5, k+1, "|", 0);
-		drawText(pScreen, 5, k+2, "|", 0);
-		drawLine(pScreen, 6, k-1, 25, '-', 0);
-		drawLine(pScreen, 6, k+3, 25, '-', 0);
-		drawText(pScreen, 31, k, "|", 0);
-		drawText(pScreen, 31, k+1, "|", 0);
-		drawText(pScreen, 31, k+2, "|", 0);
-		if(k+1 == pModel->arrow_position){
-			id = 2;
 		}
 	}
-	drawText(pScreen, 16, 6, "Play", 1);
-	drawText(pScreen, 14, 12, "Settings", 0);
-	drawText(pScreen, 16, 18, "Quit", 0);
-	drawText(pScreen, 2, pModel->arrow_position, "➡️", 0);*/
-	///
-	srand(time(NULL));
-	int map[MSIZE][MSIZE];  //matrix : rock (20%) = 1; grass (35%) = 0; trees (5%) = 3; dirt  (25%) = 2; flowers (10%)= 4; (i changed the proba just to test smthg); s = surfaces
-
-	 const char* SURFACE_TYPES[] = {  //énumération pour stocker les 5 surfaces
-	   "🪨",
-	   "🌱",
-	   "🌳",
-	   "🏜️",
-	   "🌷"
-	 };
-	 double SURFACE_PROBABILITIES[] = { //proba des 5 surfaces (j'ai changé les proba juste pour un test)
-	   0.25,
-	   0.25,
-	   0.2,
-	   0.2,
-	   0.1
-	 };
-	//génération de la map
-	 for(int x=0; x<MSIZE; x++){
-	   for(int y=0; y<MSIZE; y++){
-	     double noise = perlin(x / (double)MSIZE, y / (double)MSIZE); //calcul bruit de Perlin
-	     int surface_type = -1;
-	     double prob_sum = 0.0;
-	     for(int i=0; i<sizeof(SURFACE_PROBABILITIES) / sizeof(double); i++){
-	       prob_sum += SURFACE_PROBABILITIES[i];
-	       if (noise < prob_sum){
-	         surface_type = i;
-	         break;
-	       }
-	     }
-	     if (surface_type == -1){
-	       surface_type = sizeof(SURFACE_PROBABILITIES) / sizeof(double) - 1;
-	     }
-	     map[x][y] = surface_type;
-	   }
-	 }
-	//Affichage de la map
-	 for (int y=0; y<MSIZE; y++){
-	   for(int x=0; x<MSIZE; x++){
-	     printf("%-7s", SURFACE_TYPES[map[x][y]]);
-	   }
-	   printf("\n");
-	 }
 }
 
 void finish(void* pUserData){
-  
+	
 }
 
 
-
 int main() {
-  Model model;
-  Callbacks cb;
-  cb.cbInit= init;        
-  cb.cbEvent= event;        
-  cb.cbUpdate= update;
-  cb.cbDraw= draw;
-  cb.cbFinish= finish;
-  
-
-  
-  gameLoop(createGame(50, 50, &model, &cb, 0));
-  
-  return 0; 
+	Model model;
+	Callbacks cb;
+	cb.cbInit= init;        
+	cb.cbEvent= event;        
+	cb.cbUpdate= update;
+	cb.cbDraw= draw;
+	cb.cbFinish= finish;
+	
+	
+	
+	gameLoop(createGame(100, 50, &model, &cb, 0));
+	  
+	return 0; 
 }
