@@ -7,6 +7,7 @@
 
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 21
+#define SIZEMAP 100
 
 typedef struct{
   char *name;
