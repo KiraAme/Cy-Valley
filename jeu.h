@@ -7,7 +7,7 @@
 
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 21
-#define SIZEMAP 100
+
 typedef struct{
   char *name;
   int brk ;
@@ -20,8 +20,8 @@ typedef struct{
 typedef struct{
   int x;
   int y;
-  int x_cam;
-  int y_cam;
+  int cam_x;
+  int cam_y;
   int arrow_position;
   int game_status;
   float map[100][100];
