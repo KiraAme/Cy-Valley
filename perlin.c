@@ -1,4 +1,4 @@
-#include "jeu.h"
+#include "game.h"
 
 void initialize_permutation_table(int permutation[]){
     int i, j, tmp;
