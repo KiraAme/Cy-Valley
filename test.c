@@ -5,8 +5,10 @@ void init(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
 	
 	//Player's coordinates when spawned	
-	pModel->x = 15;
-	pModel->y = 15;
+	pModel->x = SIZEMAP/2;
+	pModel->y = SIZEMAP/2;
+	pModel->cam_x = pModel->x-10;
+	pModel->cam_y = pModel->y-10;
 	
 	//The y arrow's coordinates 
 	pModel->arrow_position = 6;
@@ -16,6 +18,7 @@ void init(void* pUserData, Screen* pScreen){
 	setColor(2, 255, 255, 255);
 	setColorPair(1, 1, 0);
 	setColorPair(2, 2, 0);
+	setColorPair(3, 0, 2);
 	
 	//Game status (1 = Main menu, 2 = Settings, 3 = Load menu, 4 = New game or load, 5 = Game)
 	pModel->game_status = 1;
@@ -32,8 +35,8 @@ void init(void* pUserData, Screen* pScreen){
 	initialize_gradient_table(gradient);
 	
 	double i, j;
-	for(i=0; i<100; i++){
-		for(j=0; j<100; j++){
+	for(i=0; i<SIZEMAP; i++){
+		for(j=0; j<SIZEMAP; j++){
 			pModel->map[(int)i][(int)j] = (int)noise(i/15, j/15, permutation, gradient);
 			/*if(i%2==0){
 				pModel->map2[i][j]="💧";
@@ -48,34 +51,63 @@ void init(void* pUserData, Screen* pScreen){
 	}
 	replaceWithBiomes(pModel->map, pModel->map2);
 	replaceWithBiomes2(pModel->map2);
+	while(pModel->map2[pModel->x][pModel->y].go_through!=1){ 
+		pModel->map2[pModel->x][pModel->y++];
+		pModel->map2[pModel->x][pModel->cam_y++];
+	}
+	
 }
 
 void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	Model* pModel = (Model*)pUserData;
 	if(pModel->game_status!=5){
-		menu(pScreen, pEvt, pModel);
+		menu(pScreen, pEvt, pModel);	
 	}
 	else{
-		if(pEvt->code == KEY_ARROW_DOWN){
-			if(pModel->y<80){
+		if(pEvt->code == KEY_S_LOWER){
+			if(pModel->cam_y<(SIZEMAP-CAMERA_SIZE) && pModel->map2[pModel->x][pModel->y+1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
 	  			pModel->y++;
+	  			pModel->cam_y++;
 	  		}
+	  		else if(pModel->y<(SIZEMAP-1) && pModel->map2[pModel->x][pModel->y+1].go_through ){
+				pModel->y++;
+			}
 		}
-		if(pEvt->code == KEY_ARROW_UP){
-			if(pModel->y>0){
+		if(pEvt->code == KEY_Z_LOWER){
+			if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2){
 	  			pModel->y--;
+	  			pModel->cam_y--;
 	  		}
+	  		else if(pModel->y>0 && pModel->map2[pModel->x][pModel->y-1].go_through ){
+				pModel->y--;
+			}
 		}
-		if(pEvt->code == KEY_ARROW_RIGHT){
-			if(pModel->x<80){
+		if(pEvt->code == KEY_D_LOWER){
+			if(pModel->cam_x<(SIZEMAP-CAMERA_SIZE) && pModel->map2[pModel->x+1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){	
 	  			pModel->x++;
+	  			pModel->cam_x++;
 	  		}
+	  		else if(pModel->x<(SIZEMAP-1) && pModel->map2[pModel->x+1][pModel->y].go_through ){
+				pModel->x++;
+			}
 			
 		}
-		if(pEvt->code == KEY_ARROW_LEFT){
-			if(pModel->x>0){
+		if(pEvt->code == KEY_Q_LOWER){
+			if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){
 	  			pModel->x--;
+	  			pModel->cam_x--;
 	  		}
+	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].go_through ){
+				pModel->x--;
+			}
+		}
+		if(pEvt->code == KEY_E_LOWER){
+			debug("oui");
+			int dif_x = pModel->x - pModel->cam_x - 10;
+			int dif_y = pModel->y - pModel->cam_y - 10;
+			int i = (pScreen->width-CAMERA_SIZE)/2;
+			int j = (pScreen->height-CAMERA_SIZE)/2;
+			drawText(pScreen, i+dif_x+1+CAMERA_SIZE/2, j+dif_y+CAMERA_SIZE/2, "  ", 1);
 		}
 	}
 	clear();
@@ -83,9 +115,8 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
 	
-	return 0;
+	return 0;   	
 }
-
 void draw(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
 	int id = 2;
@@ -93,13 +124,17 @@ void draw(void* pUserData, Screen* pScreen){
 		draw_menu(pScreen, pModel, id, pModel->game_status);
 	}
 	else{
-		for(int i=1; i<20; i++){
-			for(int j=1; j<20; j++){
-				if(i==10 && j==10){
-				drawText(pScreen, i, j, "🐰", 0);
+		for(int i=0; i<CAMERA_SIZE; i++){
+			for(int j=0; j<CAMERA_SIZE; j++){
+				int dif_x = pModel->x - pModel->cam_x - 10;
+				int dif_y = pModel->y - pModel->cam_y - 10;
+				int i2 = i + (pScreen->width-CAMERA_SIZE)/2;
+				int j2 = j + (pScreen->height-CAMERA_SIZE)/2;
+				if(i==CAMERA_SIZE/2 + dif_x && j==CAMERA_SIZE/2 + dif_y){
+					drawText(pScreen, i2, j2, "🐰", 0);
 				}
 				else{
-					drawText(pScreen, i, j, pModel->map2[i-1+pModel->x][j-1+pModel->y], 0);
+					drawText(pScreen, i2, j2, pModel->map2[i+pModel->cam_x][j+pModel->cam_y].name, 0);
 				}
 				
 			}
@@ -123,7 +158,7 @@ int main() {
 	
 	
 	
-	gameLoop(createGame(100, 100, &model, &cb, 0));
+	gameLoop(createGame(100, 50, &model, &cb, 0));
 	  
 	return 0; 
 }

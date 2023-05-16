@@ -21,6 +21,7 @@ void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 	
 	}
 	if(pEvt->code == KEY_RETURN){
+		clear();
 		switch(pModel->arrow_position){
 			case 6:
 				if(pModel->game_status == 1){
@@ -71,13 +72,7 @@ void draw_menu(Screen* pScreen, Model* pModel, int id, char status){
 			id = 2;
 		}
 	}
-	//erase the title
-	drawText(pScreen, 14, 6, "           ", 1);
-	drawText(pScreen, 14, 12, "            ", 0);
-	drawText(pScreen, 14, 18, "            ", 0);
-	for(int k=19; k<30; k++){
-		drawLine(pScreen, 5, k+3, 30, ' ', 0);
-	}
+
 	switch(status){
 		case 1:
 			drawText(pScreen, 16, 6, "Play", 1);
