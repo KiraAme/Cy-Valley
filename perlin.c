@@ -77,7 +77,7 @@ double noise(double x, double y, int permutation[], double gradient[TABLE_SIZE][
 }
 
 
-void replaceWithBiomes(float tab[100][100], Surface map[100][100]){
+void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP]){
 	Surface plain;
 	Surface beach;
 	Surface lake;
@@ -96,8 +96,8 @@ void replaceWithBiomes(float tab[100][100], Surface map[100][100]){
 	lake.take=0;
 	lake.push=0;
 	lake.go_through=0;
-	for(int i = 0; i < 100; i++){
-		for (int j = 0; j < 100; j++){
+	for(int i = 0; i < SIZEMAP; i++){
+		for (int j = 0; j < SIZEMAP; j++){
 			if(tab[i][j] == 0) {
 				map[i][j] = plain; // Plain
 			}
@@ -111,7 +111,7 @@ void replaceWithBiomes(float tab[100][100], Surface map[100][100]){
 	}
 }
 
-void replaceWithBiomes2(Surface map[100][100]){
+void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 	Surface plain;
 	Surface beach;
 	Surface lake;
@@ -136,9 +136,9 @@ void replaceWithBiomes2(Surface map[100][100]){
 	rock.take=0;
 	rock.push=0;
 	rock.go_through=0;
-	for(int i = 0; i < 100; i++){
-		for (int j = 0; j < 100; j++){
-			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % 100 < 5)){
+	for(int i = 0; i < SIZEMAP; i++){
+		for (int j = 0; j < SIZEMAP; j++){
+			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % SIZEMAP < 5)){
 				map[i][j] = rock; // Plain
 			}
 		}
