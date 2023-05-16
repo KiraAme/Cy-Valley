@@ -1,5 +1,5 @@
 //export LD_LIBRARY_PATH=lib
-#include "jeu.h"
+#include "game.h"
 
 void init(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
