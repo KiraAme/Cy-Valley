@@ -3,10 +3,17 @@
 
 void init(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
-	
+	//Player's inventory and health when spawned
+	pModel->p1.health_point=3;
+	pModel->p1.quest_advancement=0;
+	pModel->p1.inventory.flower_num=0;
+	pModel->p1.inventory.have_pickaxe=0;
+	pModel->p1.inventory.item_1=0;;
 	//Player's coordinates when spawned	
-	pModel->x = 15;
-	pModel->y = 15;
+	pModel->x = SIZEMAP/2;
+	pModel->y = SIZEMAP/2;
+	pModel->cam_x = pModel->x-10;
+	pModel->cam_y = pModel->y-10;
 	
 	//The y arrow's coordinates 
 	pModel->arrow_position = 6;
@@ -19,7 +26,6 @@ void init(void* pUserData, Screen* pScreen){
 	
 	//Game status (1 = Main menu, 2 = Settings, 3 = Load menu, 4 = New game or load, 5 = Game)
 	pModel->game_status = 1;
-	
 	//map creation
 	int permutation[TABLE_SIZE];
 	double gradient[TABLE_SIZE][2];
@@ -32,8 +38,8 @@ void init(void* pUserData, Screen* pScreen){
 	initialize_gradient_table(gradient);
 	
 	double i, j;
-	for(i=0; i<100; i++){
-		for(j=0; j<100; j++){
+	for(i=0; i<SIZEMAP; i++){
+		for(j=0; j<SIZEMAP; j++){
 			pModel->map[(int)i][(int)j] = (int)noise(i/15, j/15, permutation, gradient);
 			/*if(i%2==0){
 				pModel->map2[i][j]="💧";
@@ -48,9 +54,10 @@ void init(void* pUserData, Screen* pScreen){
 	}
 	replaceWithBiomes(pModel->map, pModel->map2);
 	replaceWithBiomes2(pModel->map2);
-	while(pModel->map2[10+pModel->x][10+pModel->y].go_through!=1){ 
+	while(pModel->map2[pModel->x][pModel->y].go_through!=1){ 
 		//debug("+");
-		pModel->map2[10+pModel->x][10+pModel->y++];
+		pModel->map2[pModel->x][pModel->y++];
+		pModel->map2[pModel->x][pModel->cam_y++];
 	}
 	
 }
@@ -61,28 +68,72 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 		menu(pScreen, pEvt, pModel);	
 	}
 	else{
-		if(pEvt->code == KEY_ARROW_DOWN){
-			if(pModel->y<80 && pModel->map2[pModel->x+10][pModel->y+11].go_through){	
+		if(pEvt->code == 115){
+			if(pModel->cam_y<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x][pModel->y+1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
 	  			pModel->y++;
-	  					
+	  			pModel->cam_y++;
 	  		}
+	  		else if(pModel->y<SIZEMAP - 1 && pModel->map2[pModel->x][pModel->y+1].go_through ){
+				pModel->y++;
+			}
 		}
-		if(pEvt->code == KEY_ARROW_UP){
-			if(pModel->y>0 && pModel->map2[pModel->x+10][pModel->y+9].go_through){
+		if(pEvt->code == 122){
+			if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){
 	  			pModel->y--;
+	  			pModel->cam_y--;
 	  		}
+	  		else if(pModel->y>0 && pModel->map2[pModel->x][pModel->y-1].go_through ){
+				pModel->y--;
+			}
 		}
-		if(pEvt->code == KEY_ARROW_RIGHT){
-			if(pModel->x<80 && pModel->map2[pModel->x+11][pModel->y+10].go_through){
+		if(pEvt->code == 100){
+			if(pModel->cam_x<SIZEMAP - CAMERA_SIZE && pModel->map2[pModel->x+1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){	
 	  			pModel->x++;
+	  			pModel->cam_x++;
 	  		}
+	  		else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].go_through ){
+				pModel->x++;
+			}
 			
 		}
-		if(pEvt->code == KEY_ARROW_LEFT){
-			if(pModel->x>0 && pModel->map2[pModel->x+9][pModel->y+10].go_through){
+		if(pEvt->code == 113){
+			if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){
 	  			pModel->x--;
+	  			pModel->cam_x--;
 	  		}
+	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].go_through ){
+				pModel->x--;
+			}
 		}
+		if(pEvt->code == 97){
+			if(pModel->map2[pModel->x][pModel->y].take && pModel->p1.inventory.flower_num<10){
+				pModel->map2[pModel->x][pModel->y].name="🍂";
+				pModel->map2[pModel->x][pModel->y].take=0;
+				pModel->p1.inventory.flower_num++;
+			}
+		}
+		if(pEvt->code == 101){
+			if(pModel->map2[pModel->x][pModel->y].npc1.is_npc ){
+				if(pModel->p1.quest_advancement==0){
+					if(pModel->map2[pModel->x][pModel->y].npc1.flower_num<20){
+						while(pModel->p1.inventory.flower_num!=0 && pModel->map2[pModel->x][pModel->y].npc1.flower_num<=20){
+							pModel->map2[pModel->x][pModel->y].npc1.flower_num++;
+							pModel->p1.inventory.flower_num--;
+						}
+					}
+					else{
+						pModel->p1.quest_advancement++;
+						pModel->p1.inventory.have_pickaxe=1;
+					}
+						
+					//case 1:;
+						
+					//case 2:;
+						
+				}
+			}
+		}					
+				
 	}
 	
 	clear();
@@ -99,19 +150,34 @@ void draw(void* pUserData, Screen* pScreen){
 		draw_menu(pScreen, pModel, id, pModel->game_status);
 	}
 	else{
+		
 		for(int i=0; i<CAMERA_SIZE; i++){
 			for(int j=0; j<CAMERA_SIZE; j++){
+				int dif_x = pModel->x - pModel->cam_x - 10;
+				int dif_y = pModel->y - pModel->cam_y - 10;
 				int i2 = i + (pScreen->width-CAMERA_SIZE)/2;
 				int j2 = j + (pScreen->height-CAMERA_SIZE)/2;
-				if(i==CAMERA_SIZE/2 && j==CAMERA_SIZE/2){
+				if(i==CAMERA_SIZE/2 + dif_x && j==CAMERA_SIZE/2 + dif_y){
 					drawText(pScreen, i2, j2, "🐰", 0);
+				
 				}
 				else{
-					drawText(pScreen, i2, j2, pModel->map2[i+pModel->x][j+pModel->y].name, 0);
+					drawText(pScreen, i2, j2, pModel->map2[i+pModel->cam_x][j+pModel->cam_y].name, 0);
 				}
-				
 			}
+		
 		}
+		drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE+2,(pScreen->height-CAMERA_SIZE)/2,9,'-',0); 
+		for(int i=0;i<CAMERA_SIZE/2;i++){
+			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 +CAMERA_SIZE ,i+(pScreen->height-CAMERA_SIZE)/2+1 ,"|", 0);
+			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 +CAMERA_SIZE*2,i+ (pScreen->height-CAMERA_SIZE)/2+CAMERA_SIZE/2,"|", 0);
+		}
+		for(int i=0;i<CAMERA_SIZE/2;i++){
+			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 +CAMERA_SIZE*2+CAMERA_SIZE/2,i+(pScreen->height-CAMERA_SIZE)/2+1 ,"|", 0);
+			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 +CAMERA_SIZE*2+CAMERA_SIZE/2,i+ (pScreen->height-CAMERA_SIZE)/2+CAMERA_SIZE/2,"|", 0);
+		}
+		drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE*2+1,(pScreen->height-CAMERA_SIZE)/2+CAMERA_SIZE-1,9,'-',0); 
+		
 	}
 }
 

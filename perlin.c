@@ -77,7 +77,7 @@ double noise(double x, double y, int permutation[], double gradient[TABLE_SIZE][
 }
 
 
-void replaceWithBiomes(float tab[100][100], Surface map[100][100]){
+void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP]){
 	Surface plain;
 	Surface beach;
 	Surface lake;
@@ -86,18 +86,24 @@ void replaceWithBiomes(float tab[100][100], Surface map[100][100]){
 	plain.take=1;
 	plain.push=0;
 	plain.go_through=1;
+	plain.npc1.is_npc=0;
+	plain.npc1.flower_num=0;
 	beach.name="⏳";
 	beach.brk=0;
 	beach.take=0;
 	beach.push=0;
 	beach.go_through=1;
+	beach.npc1.is_npc=0;
+	beach.npc1.flower_num=0;
 	lake.name="💧";
 	lake.brk=0;
 	lake.take=0;
 	lake.push=0;
 	lake.go_through=0;
-	for(int i = 0; i < 100; i++){
-		for (int j = 0; j < 100; j++){
+	lake.npc1.is_npc=0;
+	lake.npc1.flower_num=0;
+	for(int i = 0; i < SIZEMAP; i++){
+		for (int j = 0; j < SIZEMAP; j++){
 			if(tab[i][j] == 0) {
 				map[i][j] = plain; // Plain
 			}
@@ -111,37 +117,30 @@ void replaceWithBiomes(float tab[100][100], Surface map[100][100]){
 	}
 }
 
-void replaceWithBiomes2(Surface map[100][100]){
-	Surface plain;
-	Surface beach;
-	Surface lake;
+void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 	Surface rock;
-	plain.name="🌱";
-	plain.brk=0;
-	plain.take=1;
-	plain.push=0;
-	plain.go_through=1;
-	beach.name="⏳";
-	beach.brk=0;
-	beach.take=0;
-	beach.push=0;
-	beach.go_through=1;
-	lake.name="💧";
-	lake.brk=0;
-	lake.take=0;
-	lake.push=0;
-	lake.go_through=0;
+	Surface farmer;
 	rock.name="🪨";
 	rock.brk=1;
 	rock.take=0;
 	rock.push=0;
 	rock.go_through=0;
-	for(int i = 0; i < 100; i++){
-		for (int j = 0; j < 100; j++){
-			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % 100 < 5)){
-				map[i][j] = rock; // Plain
+	rock.npc1.is_npc=0;
+	rock.npc1.flower_num=0;
+	farmer.name="👨‍🌾";
+	farmer.brk=0;
+	farmer.take=0;
+	farmer.push=0;
+	farmer.go_through=1;
+	farmer.npc1.is_npc=1;
+	farmer.npc1.flower_num=0;
+	for(int i = 0; i < SIZEMAP; i++){
+		for (int j = 0; j < SIZEMAP; j++){
+			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % SIZEMAP < 5)){
+				map[i][j] = rock; // Rock
 			}
 		}
 	}
+	map[SIZEMAP/2-1][SIZEMAP/2-1]=farmer;
 }
 
