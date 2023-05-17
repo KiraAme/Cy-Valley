@@ -4,15 +4,17 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <string.h>
+#include <stdio.h>
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 21
-#define SIZEMAP 250
+#define SIZEMAP 100
 
 
 typedef struct{
 	int is_npc;
 	int flower_num;
+	int ore_mineral;
 }Npc;
 
 typedef struct{
@@ -22,12 +24,15 @@ typedef struct{
   int push ;
   int go_through;
   Npc npc1;
+  int id;
 } Surface;
 
 typedef struct{
 	int flower_num;
 	int have_pickaxe;
-	int item_1;
+	int have_sword;
+	int ore_mineral;
+	int fish_num;
 
 } Inv;
 
