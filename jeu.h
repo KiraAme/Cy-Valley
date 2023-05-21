@@ -15,6 +15,7 @@ typedef struct{
 	int is_npc;
 	int flower_num;
 	int ore_mineral;
+	int fish_num;
 }Npc;
 
 typedef struct{

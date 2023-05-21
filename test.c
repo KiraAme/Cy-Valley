@@ -116,10 +116,15 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 			}
 		}
 		if(pEvt->code == KEY_E_LOWER){
-			if(pModel->map2[pModel->x][pModel->y].take && pModel->p1.inventory.flower_num<10){
+			if(pModel->map2[pModel->x][pModel->y].id==1 && pModel->p1.inventory.flower_num<10){
 				pModel->map2[pModel->x][pModel->y].name="🍂";
 				pModel->map2[pModel->x][pModel->y].take=0;
 				pModel->p1.inventory.flower_num++;
+			}
+			if(pModel->map2[pModel->x][pModel->y].id==7 && pModel->p1.inventory.fish_num<3){
+				pModel->map2[pModel->x][pModel->y].name="💧";
+				pModel->map2[pModel->x][pModel->y].take=0;
+				pModel->p1.inventory.fish_num++;
 			}
 			if(pModel->map2[pModel->x][pModel->y].npc1.is_npc ){
 				if(pModel->p1.quest_advancement==0){
@@ -153,7 +158,17 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 						}
 					}
 				}
-					//case 2:;
+				if(pModel->p1.quest_advancement==2){
+					if(pModel->map2[pModel->x][pModel->y].npc1.fish_num<9){
+						while(pModel->p1.inventory.fish_num!=0 && pModel->map2[pModel->x][pModel->y].npc1.fish_num<=15){
+							pModel->map2[pModel->x][pModel->y].npc1.fish_num++;
+							pModel->p1.inventory.fish_num--;
+						}
+						if(pModel->map2[pModel->x][pModel->y].npc1.fish_num>=9){
+							pModel->p1.quest_advancement++;
+						}
+					}
+			      }
 						
 			}
 		}
@@ -184,6 +199,9 @@ void draw(void* pUserData, Screen* pScreen){
 	sprintf(buffer2,"%d",pModel->y);
 	if(pModel->game_status!=5){
 		draw_menu(pScreen, pModel, id, pModel->game_status);
+	}
+	else if(pModel->p1.quest_advancement==3){
+		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you completed all quests !",0);
 	}
 	else{
 		
