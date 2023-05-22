@@ -187,16 +187,30 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 }
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
-	
+	char a[10];
+	sprintf(a, "%d", deltaTime/1000, 0);
+	drawText(pScreen, 10, 1, a, 0);
 	return 0;   	
 }
 void draw(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
 	int id = 2;
+	
 	char buffer[4];
 	char buffer2[4];
+	char buffer3[4];
+	char buffer4[4];
+	char buffer5[4];
+	char buffer6[4];
+	char buffer7[4];
 	sprintf(buffer,"%d",pModel->x);
 	sprintf(buffer2,"%d",pModel->y);
+	sprintf(buffer3,"%d",pModel->p1.inventory.flower_num);
+	sprintf(buffer4,"%d",pModel->p1.inventory.have_pickaxe);
+	sprintf(buffer5,"%d",pModel->p1.inventory.have_sword);
+	sprintf(buffer6,"%d",pModel->p1.inventory.ore_mineral);
+	sprintf(buffer7,"%d",pModel->p1.inventory.fish_num);
+	
 	if(pModel->game_status!=5){
 		draw_menu(pScreen, pModel, id, pModel->game_status);
 	}
@@ -219,11 +233,24 @@ void draw(void* pUserData, Screen* pScreen){
 					drawText(pScreen, i2, j2, pModel->map2[i+pModel->cam_x][j+pModel->cam_y].name, 0);
 				}
 			}
+		}
 		drawText(pScreen,0,48,"x=",0);
 		drawText(pScreen,0,49,"y=",0);
 		drawText(pScreen,2,48,buffer,0);
 		drawText(pScreen,2,49,buffer2,0);
-		}
+		
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+2, 2+(pScreen->height-CAMERA_SIZE)/2,"🌼 ", 0);
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+2, 6+(pScreen->height-CAMERA_SIZE)/2,"⛏️ ", 0);
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+2, 10+(pScreen->height-CAMERA_SIZE)/2,"⚔️ ", 0);
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+2, 14+(pScreen->height-CAMERA_SIZE)/2,"💎 ", 0);
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+2, 18+(pScreen->height-CAMERA_SIZE)/2,"🐟 ", 0);
+		
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+6, 2+(pScreen->height-CAMERA_SIZE)/2,buffer3, 0);
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+6, 6+(pScreen->height-CAMERA_SIZE)/2,buffer4, 0);
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+6, 10+(pScreen->height-CAMERA_SIZE)/2,buffer5, 0);
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+6, 14+(pScreen->height-CAMERA_SIZE)/2,buffer6, 0);
+		drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE+6, 18+(pScreen->height-CAMERA_SIZE)/2,buffer7, 0);
+
 
 		for(int i=0;i<CAMERA_SIZE;i++){
 			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE, i+(pScreen->height-CAMERA_SIZE)/2,"|", 0);
@@ -232,7 +259,6 @@ void draw(void* pUserData, Screen* pScreen){
 		for(int i=0; i<=20; i+=4){
 			drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE+1,(pScreen->height-CAMERA_SIZE)/2+i,9,'-',0);
 		}
-		
 	}
 }
 
