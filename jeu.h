@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdio.h>
 #define TABLE_SIZE  256
-#define CAMERA_SIZE 21
+#define CAMERA_SIZE 31
 #define SIZEMAP 100
 
 
@@ -38,7 +38,7 @@ typedef struct{
 } Inv;
 
 typedef struct{
-	float health_point;
+	int health_point;
 	Inv inventory;
 	int quest_advancement;
 } Player;
@@ -53,6 +53,9 @@ typedef struct{
   float map[SIZEMAP][SIZEMAP];
   int seed;
   Surface map2[SIZEMAP][SIZEMAP];
+  int score;
+  Surface temp1;
+  Surface temp2;
 } Model;
 
 
@@ -62,12 +65,6 @@ typedef struct{
 
 
 
-
-typedef struct{
-	int ad;
-	float health_point;
-	char* weapon;
-} Mob;
 
 
 
