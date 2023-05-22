@@ -54,6 +54,8 @@ typedef struct{
   float map[SIZEMAP][SIZEMAP];
   int seed;
   Surface map2[SIZEMAP][SIZEMAP];
+  Surface temp1;
+  Surface temp2;
 } Model;
 
 

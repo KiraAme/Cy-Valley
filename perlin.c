@@ -150,7 +150,6 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 	fish.npc1.is_npc=0;
 	fish.npc1.flower_num=0;
 	fish.id=7;
-	//
 	crate.name="📦";
 	crate.brk=0;
 	crate.take=0;
@@ -170,9 +169,10 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 			if(map[i][j].name == "💧" && rand() % 100 < 2){
 				map[i][j] = fish;
 			}
-			if(map[i][j].name == "💧" && map[i][j] == "⏳" && rand() % 100 < 1){
+			if(map[i][j].name == "🌱" && rand() % 500 < 2){
 				map[i][j] = crate;
 			}
+
 		}
 	}
 	

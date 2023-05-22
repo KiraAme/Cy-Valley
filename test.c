@@ -9,6 +9,15 @@ void init(void* pUserData, Screen* pScreen){
 	pModel->p1.inventory.flower_num=0;
 	pModel->p1.inventory.have_pickaxe=0;
 	pModel->p1.inventory.have_sword=0;
+	//
+	pModel->temp1.name="🌱";
+	pModel->temp1.brk=0;
+	pModel->temp1.take=1;
+	pModel->temp1.push=0;
+	pModel->temp1.go_through=1;
+	pModel->temp1.npc1.is_npc=0;
+	pModel->temp1.npc1.flower_num=0;
+	pModel->temp1.id=1;
 	//Player's coordinates when spawned	
 	pModel->x = SIZEMAP/2;
 	pModel->y = SIZEMAP/2;
@@ -79,25 +88,58 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	}
 	else{
 		if(pEvt->code == KEY_S_LOWER){
-			if(pModel->cam_y<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x][pModel->y+1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
+			if(pModel->cam_y<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x][pModel->y+1].id==8 && pModel->map2[pModel->x][pModel->y+2].go_through){
+	  				pModel->temp2=pModel->map2[pModel->x][pModel->y+2];
+	  				pModel->map2[pModel->x][pModel->y+2]=pModel->map2[pModel->x][pModel->y+1];
+	  				pModel->map2[pModel->x][pModel->y+1]=pModel->temp1;
+	  				pModel->temp1=pModel->temp2;
+	  				pModel->y++;
+	  				pModel->cam_y++;
+	  		}
+			else if(pModel->cam_y<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x][pModel->y+1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
 	  			pModel->y++;
 	  			pModel->cam_y++;
+	  		}
+	  		else if(pModel->y<SIZEMAP - 1 && pModel->map2[pModel->x][pModel->y+1].id==8 && pModel->map2[pModel->x][pModel->y+2].go_through){
+	  				pModel->temp2=pModel->map2[pModel->x][pModel->y+2];
+	  				pModel->map2[pModel->x][pModel->y+2]=pModel->map2[pModel->x][pModel->y+1];
+	  				pModel->map2[pModel->x][pModel->y+1]=pModel->temp1;
+	  				pModel->temp1=pModel->temp2;
+	  				pModel->y++;
 	  		}
 	  		else if(pModel->y<SIZEMAP - 1 && pModel->map2[pModel->x][pModel->y+1].go_through ){
 				pModel->y++;
 			}
+			
 		}
 		if(pEvt->code == KEY_Z_LOWER){
-			if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){
+			if(pModel->map2[pModel->x][pModel->y-1].id==8 && pModel->map2[pModel->x][pModel->y-2].go_through){
+	  				pModel->temp2=pModel->map2[pModel->x][pModel->y-2];
+	  				pModel->map2[pModel->x][pModel->y-2]=pModel->map2[pModel->x][pModel->y-1];
+	  				pModel->map2[pModel->x][pModel->y-1]=pModel->temp1;
+	  				pModel->temp1=pModel->temp2;
+	  				pModel->y--;
+	  				pModel->cam_y--;
+	  		}
+			else if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){
 	  			pModel->y--;
 	  			pModel->cam_y--;
+	  			
 	  		}
 	  		else if(pModel->y>0 && pModel->map2[pModel->x][pModel->y-1].go_through ){
 				pModel->y--;
 			}
 		}
 		if(pEvt->code == KEY_D_LOWER){
-			if(pModel->cam_x<SIZEMAP - CAMERA_SIZE && pModel->map2[pModel->x+1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){	
+			if(pModel->map2[pModel->x+1][pModel->y].id==8 && pModel->map2[pModel->x+2][pModel->y].go_through){
+	  				pModel->temp2=pModel->map2[pModel->x+2][pModel->y];
+	  				pModel->map2[pModel->x+2][pModel->y]=pModel->map2[pModel->x+1][pModel->y];
+	  				pModel->map2[pModel->x+1][pModel->y]=pModel->temp1;
+	  				pModel->temp1=pModel->temp2;
+	  				pModel->x++;
+	  				pModel->cam_x++;
+	  		}
+			else if(pModel->cam_x<SIZEMAP - CAMERA_SIZE && pModel->map2[pModel->x+1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){	
 	  			pModel->x++;
 	  			pModel->cam_x++;
 	  		}
@@ -107,7 +149,15 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 			
 		}
 		if(pEvt->code == KEY_Q_LOWER){
-			if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){
+			if(pModel->map2[pModel->x-1][pModel->y].id==8 && pModel->map2[pModel->x-2][pModel->y].go_through){
+	  				pModel->temp2=pModel->map2[pModel->x][pModel->y-2];
+	  				pModel->map2[pModel->x-2][pModel->y]=pModel->map2[pModel->x-1][pModel->y];
+	  				pModel->map2[pModel->x-1][pModel->y]=pModel->temp1;
+	  				pModel->temp1=pModel->temp2;
+	  				pModel->x--;
+	  				pModel->cam_x--;
+	  		}
+			else if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){
 	  			pModel->x--;
 	  			pModel->cam_x--;
 	  		}
@@ -180,26 +230,29 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 				pModel->p1.inventory.ore_mineral++;
 			}
 		}
-		if(pEvt->code == KEY_R_LOWER){
-			if(pModel->x][pModel->y-1].push pModel->x-1][pModel->y].push && pModel || pModel->x][pModel->y+1].push || pModel->x+1][pModel->y].push){
-				if(pModel->map2[pModel->x][pModel->y-2].go_through==0 || pModel->map2[pModel->x-2][pModel->y].go_through==0 || pModel->map2[pModel->x][pModel->y+2].go_through==0 || pModel->map2[pModel->x+2][pModel->y].go_through==0){
-					if(pEvt->code == KEY_Z_LOWER){
-						if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){
-							(pModel->map2[pModel->x][pModel->y].id==8
-						}
-						(pModel->map2[pModel->x][pModel->y].id==8				
+		//if(pEvt->code == KEY_R_LOWER){
+		//	if(pModel->x][pModel->y-1].push pModel->x-1][pModel->y].push && pModel || pModel->x][pModel->y+1].push || pModel->x+1][pModel->y].push){
+		//		if(pEvt->code == KEY_Z_LOWER){
+		//				if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-2].through==0){
+		//					(pModel->map2[pModel->x][pModel->y].id==8)++;
+		//				}
+		//				else if(pModel->y>0 && pModel->map2[pModel->x][pModel->y].push){
+							
+		//				}
+									
 						
-					}
-				}
+		//			}
+		//		}
 			
-			}
+		//	}
 		
-		}				
+		//}				
 				
 	}
 	
 	clear();
 }
+/*if(pModel->map2[pModel->x][pModel->y-2].go_through==0 || pModel->map2[pModel->x-2][pModel->y].go_through==0 || pModel->map2[pModel->x][pModel->y+2].go_through==0 || pModel->map2[pModel->x+2][pModel->y].go_through==0){*/
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
 	char a[10];
