@@ -225,18 +225,14 @@ void draw(void* pUserData, Screen* pScreen){
 		drawText(pScreen,2,49,buffer2,0);
 		}
 
-		for(int i=0;i<CAMERA_SIZE/2;i++){
-			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 +CAMERA_SIZE ,i+(pScreen->height-CAMERA_SIZE)/2+1 ,"|", 0);
-			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 +CAMERA_SIZE*2,i+ (pScreen->height-CAMERA_SIZE)/2+CAMERA_SIZE/2,"|", 0);
-		}
-		for(int i=0;i<CAMERA_SIZE/2;i++){
-			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 +CAMERA_SIZE*2+CAMERA_SIZE/2,i+(pScreen->height-CAMERA_SIZE)/2+1 ,"|", 0);
-			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 +CAMERA_SIZE*2+CAMERA_SIZE/2,i+ (pScreen->height-CAMERA_SIZE)/2+CAMERA_SIZE/2,"|", 0);
+		for(int i=0;i<CAMERA_SIZE;i++){
+			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE, i+(pScreen->height-CAMERA_SIZE)/2,"|", 0);
+			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2 + CAMERA_SIZE*2+CAMERA_SIZE/2,i+(pScreen->height-CAMERA_SIZE)/2,"|", 0);
 		}
 		for(int i=0; i<=20; i+=4){
-			drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE+2,(pScreen->height-CAMERA_SIZE)/2+i,9,'-',0);
+			drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE+1,(pScreen->height-CAMERA_SIZE)/2+i,9,'-',0);
 		}
-		//drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE*2+1,(pScreen->height-CAMERA_SIZE)/2+CAMERA_SIZE-1,9,'-',0); 
+		
 	}
 }
 
