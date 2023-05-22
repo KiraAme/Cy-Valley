@@ -86,16 +86,25 @@ void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP
 	plain.take=1;
 	plain.push=0;
 	plain.go_through=1;
+	plain.npc1.is_npc=0;
+	plain.npc1.flower_num=0;
+	plain.id=1;
 	beach.name="⏳";
 	beach.brk=0;
 	beach.take=0;
 	beach.push=0;
 	beach.go_through=1;
+	beach.npc1.is_npc=0;
+	beach.npc1.flower_num=0;
+	beach.id=2;
 	lake.name="💧";
 	lake.brk=0;
 	lake.take=0;
 	lake.push=0;
 	lake.go_through=0;
+	lake.npc1.is_npc=0;
+	lake.npc1.flower_num=0;
+	lake.id=3;
 	for(int i = 0; i < SIZEMAP; i++){
 		for (int j = 0; j < SIZEMAP; j++){
 			if(tab[i][j] == 0) {
@@ -112,36 +121,60 @@ void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP
 }
 
 void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
-	Surface plain;
-	Surface beach;
-	Surface lake;
 	Surface rock;
-	plain.name="🌱";
-	plain.brk=0;
-	plain.take=1;
-	plain.push=0;
-	plain.go_through=1;
-	beach.name="⏳";
-	beach.brk=0;
-	beach.take=0;
-	beach.push=0;
-	beach.go_through=1;
-	lake.name="💧";
-	lake.brk=0;
-	lake.take=0;
-	lake.push=0;
-	lake.go_through=0;
+	Surface farmer;
+	Surface tree;
+	Surface fish;
+	Surface crate;
 	rock.name="🪨";
 	rock.brk=1;
 	rock.take=0;
 	rock.push=0;
 	rock.go_through=0;
+	rock.npc1.is_npc=0;
+	rock.npc1.flower_num=0;
+	rock.id=4;
+	tree.name="🪵";
+	tree.brk=0;
+	tree.take=0;
+	tree.push=0;
+	tree.go_through=0;
+	tree.npc1.is_npc=0;
+	tree.npc1.flower_num=0;
+	tree.id=6;
+	fish.name="🐟";
+	fish.brk=0;
+	fish.take=1;
+	fish.push=0;
+	fish.go_through=0;
+	fish.npc1.is_npc=0;
+	fish.npc1.flower_num=0;
+	fish.id=7;
+	//
+	crate.name="📦";
+	crate.brk=0;
+	crate.take=0;
+	crate.push=1;
+	crate.go_through=0;
+	crate.npc1.is_npc=0;
+	crate.npc1.flower_num=0;
+	crate.id=8;
 	for(int i = 0; i < SIZEMAP; i++){
 		for (int j = 0; j < SIZEMAP; j++){
-			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % SIZEMAP < 5)){
-				map[i][j] = rock; // Plain
+			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % 100 < 5)){
+				map[i][j] = rock; // Rock
+			}
+			if(map[i][j].name == "🌱" && rand() % 100 < 4){
+				map[i][j] = tree;
+			}
+			if(map[i][j].name == "💧" && rand() % 100 < 2){
+				map[i][j] = fish;
+			}
+			if(map[i][j].name == "💧" && map[i][j] == "⏳" && rand() % 100 < 1){
+				map[i][j] = crate;
 			}
 		}
 	}
+	
 }
 

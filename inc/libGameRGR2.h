@@ -8,9 +8,6 @@
     #include <locale.h>
     #include <curses.h>
     #include "keys.h"
-    #include <stdlib.h>
-    #include <time.h>
-    #include <math.h>
 
     //------------------------------
     // CONSTANTS
