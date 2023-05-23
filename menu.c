@@ -29,6 +29,7 @@ void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 				}
 				else{
 					pModel->game_status = 5;
+					pModel->starttimestamp = time(NULL);
 				}
 				break;
 			case 12:

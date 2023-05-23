@@ -7,8 +7,14 @@
 #include <string.h>
 #include <stdio.h>
 #define TABLE_SIZE  256
-#define CAMERA_SIZE 21
+#define CAMERA_SIZE 21 //31
 #define SIZEMAP 100
+#define FLOWERREQ 10
+#define MINERALREQ1 5
+#define MINERALREQ2 15
+#define FISHREQ 5
+#define MIN_MAX 5
+#define SEC_MAX 0
 
 
 typedef struct{
@@ -24,7 +30,6 @@ typedef struct{
   int take ;
   int push ;
   int go_through;
-  int move;
   Npc npc1;
   int id;
 } Surface;
@@ -39,7 +44,7 @@ typedef struct{
 } Inv;
 
 typedef struct{
-	float health_point;
+	int health_point;
 	Inv inventory;
 	int quest_advancement;
 } Player;
@@ -51,11 +56,16 @@ typedef struct{
   int arrow_position;
   int game_status;
   Player p1;
-  float map[SIZEMAP][SIZEMAP];
+  float **map = malloc(100*sizeof(float *));
   int seed;
-  Surface map2[SIZEMAP][SIZEMAP];
+  Surface **map2 = malloc(100*sizeof(Surface *));
+  int score;
   Surface temp1;
   Surface temp2;
+  long starttimestamp;
+  int min;
+  int sec;
+  int end;
 } Model;
 
 
@@ -65,12 +75,6 @@ typedef struct{
 
 
 
-
-typedef struct{
-	int ad;
-	float health_point;
-	char* weapon;
-} Mob;
 
 
 

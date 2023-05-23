@@ -125,6 +125,7 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 	Surface farmer;
 	Surface tree;
 	Surface fish;
+	Surface mob;
 	Surface crate;
 	rock.name="🪨";
 	rock.brk=1;
@@ -132,7 +133,6 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 	rock.push=0;
 	rock.go_through=0;
 	rock.npc1.is_npc=0;
-	rock.npc1.flower_num=0;
 	rock.id=4;
 	tree.name="🪵";
 	tree.brk=0;
@@ -140,7 +140,6 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 	tree.push=0;
 	tree.go_through=0;
 	tree.npc1.is_npc=0;
-	tree.npc1.flower_num=0;
 	tree.id=6;
 	fish.name="🐟";
 	fish.brk=0;
@@ -148,7 +147,6 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 	fish.push=0;
 	fish.go_through=0;
 	fish.npc1.is_npc=0;
-	fish.npc1.flower_num=0;
 	fish.id=7;
 	crate.name="📦";
 	crate.brk=0;
@@ -158,21 +156,30 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 	crate.npc1.is_npc=0;
 	crate.npc1.flower_num=0;
 	crate.id=8;
+	mob.name="👾";
+	mob.brk=0;
+	mob.take=0;
+	mob.push=0;
+	mob.go_through=1;
+	mob.npc1.is_npc=0;
+	mob.id=10;
 	for(int i = 0; i < SIZEMAP; i++){
 		for (int j = 0; j < SIZEMAP; j++){
-			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % 100 < 5)){
+			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % 100 < 3)){
 				map[i][j] = rock; // Rock
 			}
-			if(map[i][j].name == "🌱" && rand() % 100 < 4){
+			if(map[i][j].name == "🌱" && rand() % 100 < 3){
 				map[i][j] = tree;
 			}
 			if(map[i][j].name == "💧" && rand() % 100 < 2){
 				map[i][j] = fish;
 			}
+			if(map[i][j].name == "🌱" && rand() % 100 < 1){
+				map[i][j] = mob;
+			}
 			if(map[i][j].name == "🌱" && rand() % 500 < 2){
 				map[i][j] = crate;
 			}
-
 		}
 	}
 	
