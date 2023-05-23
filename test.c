@@ -299,17 +299,16 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 							pModel->p1.inventory.flower_num--;
 						}
 						if(pModel->map2[pModel->x][pModel->y].npc1.flower_num==FLOWERREQ){
-						pModel->p1.quest_advancement++;
-						pModel->p1.inventory.have_pickaxe=1;
-						pModel->score+=1000;
+							pModel->p1.quest_advancement++;
+							pModel->p1.inventory.have_pickaxe=1;
+							pModel->score+=1000;
 						}
 					}
 					
 				}
 				if(pModel->p1.quest_advancement==1){
 					if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ1){
-						while(pModel->p1.inventory.ore_mineral!=0 && pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<=MINERALREQ1){
-						
+						while(pModel->p1.inventory.ore_mineral!=0 && pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ1){					
 							pModel->map2[pModel->x][pModel->y].npc1.ore_mineral++;
 							pModel->p1.inventory.ore_mineral--;
 						}
@@ -330,7 +329,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 				if(pModel->p1.quest_advancement==2){
 					if(pModel->map2[pModel->x][pModel->y].npc1.fish_num<FISHREQ){
 						debug("+");
-						while(pModel->p1.inventory.fish_num!=0 && pModel->map2[pModel->x][pModel->y].npc1.fish_num<=FISHREQ){
+						while(pModel->p1.inventory.fish_num!=0 && pModel->map2[pModel->x][pModel->y].npc1.fish_num<FISHREQ){
 							debug("+");
 							pModel->map2[pModel->x][pModel->y].npc1.fish_num++;
 							pModel->p1.inventory.fish_num--;
@@ -346,7 +345,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 			}
 			if(pModel->map2[pModel->x][pModel->y].id==9){
 				if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ2){
-					while(pModel->p1.inventory.ore_mineral!=0 && pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<=MINERALREQ2){
+					while(pModel->p1.inventory.ore_mineral!=0 && pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ2){
 							pModel->map2[pModel->x][pModel->y].npc1.ore_mineral++;
 							pModel->p1.inventory.ore_mineral--;
 					}
