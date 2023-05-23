@@ -1,7 +1,7 @@
 #include "jeu.h"
 
 void menu(Screen* pScreen, Event* pEvt, Model* pModel){
-	if(pEvt->code == KEY_ARROW_DOWN){
+	if(pEvt->code == KEY_S_LOWER){
 	  	if(pModel->arrow_position < 17 && pModel->game_status!=2){
 	  		drawText(pScreen, 2, pModel->arrow_position, " ", 0);
 	  		pModel->arrow_position+=6;
@@ -11,7 +11,7 @@ void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 	  		pModel->arrow_position+=6;
 	  	}
 	}
-	if(pEvt->code == KEY_ARROW_UP){
+	if(pEvt->code == KEY_Z_LOWER){
 		if(pModel->arrow_position > 6){
 	  		drawText(pScreen, 2, pModel->arrow_position, " ", 0);
 	  		pModel->arrow_position-=6;

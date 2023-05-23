@@ -40,7 +40,7 @@ void debug(const char* format, ...){
     }
     // Start retrieving arguments
     va_start(args, format );
-    fputs("[DEBUG] ", stderr);
+    fputs("", stderr);
     vfprintf(stderr, format, args );       
     // Clean up list
     va_end  (args);
