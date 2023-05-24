@@ -11,7 +11,8 @@ To play to this game, you have to use the following keyboard's keys :
 - d = Rigth
 - e = Take a flower/Take a fish/Interaction with the npc or the blacksmith being on the the surface
 - a  = To use the pickaxe on a rock above you
-\\Those keyboard's keys can be changed in the setting menu according to your desires//
+
+\\\Those keyboard's keys can be changed in the setting menu according to your desires//
 
 
 You start the game with 3 hearts (health point), and you have 10 minutes to finish the game before the time is running out. You can win on 2 different ways : 
@@ -29,7 +30,8 @@ Pour jouer à ce jeu, il vous faut utiliser les touches suivantes :
 - d = Pour aller à droite
 - e = Prendre une fleur/Prendre un poisson/Interagir avec le pnj ou le forgeron en étant sur la surface en question
 - a = Pour utiliser la pioche sur un rocher au-dessus de vous
-\\Vous pouvez bien sûr modifier ces touches selon vos envies en accédant au menu "paramètres"//
+
+\\\Vous pouvez bien sûr modifier ces touches selon vos envies en accédant au menu "paramètres"//
 
 
 Vous commencer le jeu avec 3 coeurs (points de vie), et vous avez 10 minutes pour finir le jeu. Après ce temps limite, vous avez perdu. 
