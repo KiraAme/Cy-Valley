@@ -87,7 +87,7 @@ void init(void* pUserData, Screen* pScreen){
 	}
 	replaceWithBiomes(pModel->map, pModel->map2);
 	replaceWithBiomes2(pModel->map2);
-	while(pModel->map2[pModel->x][pModel->y].go_through!=1){ 
+	while(pModel->map2[pModel->x][pModel->y].go_through!=1 || pModel->map2[pModel->x][pModel->y].id==10){ 
 		//debug("+");
 		pModel->map2[pModel->x][pModel->y++];
 		pModel->map2[pModel->x][pModel->cam_y++];
