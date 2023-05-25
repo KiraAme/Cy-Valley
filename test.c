@@ -486,7 +486,9 @@ void draw(void* pUserData, Screen* pScreen){
 		}
 		if(pModel->map2[pModel->x][pModel->y].id==9){
 			if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<5){
-				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me 20 minerals and i'll forge you the best sword ever made", 0);
+				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
+				drawText(pScreen, CAMERA_SIZE+9,CAMERA_SIZE+10, buffer13, 0);
+				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " minerals and I'll give you the best sword ever made", 0);
 			}
 			else{
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE + 10, "thank you little rabbit here's your sword", 0);
