@@ -70,6 +70,15 @@ void init(void* pUserData, Screen* pScreen){
 	initialize_permutation_table(permutation);
 	initialize_gradient_table(gradient);
 	
+	pModel->map = (float**)malloc(SIZEMAP*sizeof(float*));
+  	for (int i=0; i<SIZEMAP; i++) {
+       		 pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
+  	}
+    
+    	pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
+   	for (int i=0; i<SIZEMAP; i++) {
+		pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
+    	}
 	double i, j;
 	for(i=0; i<SIZEMAP; i++){
 		for(j=0; j<SIZEMAP; j++){
