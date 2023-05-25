@@ -7,15 +7,14 @@
 #include <string.h>
 #include <stdio.h>
 #define TABLE_SIZE  256
-#define CAMERA_SIZE 21 //31
+#define CAMERA_SIZE 31
 #define SIZEMAP 100
-#define FLOWERREQ 10
-#define MINERALREQ1 5
+#define FLOWERREQ 1
+#define MINERALREQ1 1
 #define MINERALREQ2 15
-#define FISHREQ 5
+#define FISHREQ 1
 #define MIN_MAX 5
 #define SEC_MAX 0
-
 
 typedef struct{
 	int is_npc;
@@ -56,9 +55,9 @@ typedef struct{
   int arrow_position;
   int game_status;
   Player p1;
-  float **map = malloc(100*sizeof(float *));
+  float map[SIZEMAP][SIZEMAP];
   int seed;
-  Surface **map2 = malloc(100*sizeof(Surface *));
+  Surface map2[SIZEMAP][SIZEMAP];
   int score;
   Surface temp1;
   Surface temp2;
@@ -90,7 +89,22 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]);
 void menu(Screen* pScreen, Event* pEvt, Model* pModel);
 void draw_menu(Screen* pScreen, Model* pModel, int id, char status);
 
+void init(void* pUserData, Screen* pScreen);
 void event(void* pUserData, Screen* pScreen, Event* pEvt);
+
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime);
+
 void draw(void* pUserData, Screen* pScreen);
+void init_model(Model* pModel);
+void drawText(Screen* pScreen, int x, int y, const char* text, int color);
+void draw_game_map(Screen* pScreen, Model* pModel);
+void draw_player_health(Screen* pScreen, Model* pModel);
+void draw_quest_text(Screen* pScreen, Model* pModel, char* buffer1, char* buffer2, char* buffer3, char* buffer4);
+void draw_inventory(Screen* pScreen, Model* pModel, char* buffer3, char* buffer4, char* buffer5, char* buffer6, char* buffer7);
+void draw_inventory_counts(Screen* pScreen, Model* pModel, char* buffer3, char* buffer4, char* buffer5, char* buffer6, char* buffer7);
+void draw_divider_lines(Screen* pScreen);
+void draw_timer(Screen* pScreen, Model* pModel, char* buffer9, char* buffer10);
+void draw_score(Screen* pScreen, Model* pModel, char* buffer8);
+void draw_ui(Screen* pScreen, Model* pModel);
+
 void finish(void* pUserData);
