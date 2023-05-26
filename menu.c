@@ -1,7 +1,7 @@
 #include "jeu.h"
 
 void menu(Screen* pScreen, Event* pEvt, Model* pModel){
-	if(pEvt->code == KEY_S_LOWER){
+	if(pEvt->code == KEY_ARROW_DOWN){
 	  	if(pModel->arrow_position < 17 && pModel->game_status!=2){
 	  		drawText(pScreen, 2, pModel->arrow_position, " ", 0);
 	  		pModel->arrow_position+=6;
@@ -11,7 +11,7 @@ void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 	  		pModel->arrow_position+=6;
 	  	}
 	}
-	if(pEvt->code == KEY_Z_LOWER){
+	if(pEvt->code == KEY_ARROW_UP){
 		if(pModel->arrow_position > 6){
 	  		drawText(pScreen, 2, pModel->arrow_position, " ", 0);
 	  		pModel->arrow_position-=6;
@@ -28,7 +28,9 @@ void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 					pModel->game_status = 4;
 				}
 				else{
+					//map creation
 					pModel->game_status = 5;
+					pModel->starttimestamp = time(NULL);
 				}
 				break;
 			case 12:
@@ -36,7 +38,31 @@ void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 					pModel->game_status = 2;
 				}
 				else{
-					pModel->game_status = 3;
+					/*FILE* in = fopen("save.txt", "rb");
+					if(in == NULL){
+						debug("ok");
+					}
+					
+
+					fread(pModel, sizeof(Model), 1, in);
+    
+					for (int i = 0; i < SIZEMAP; i++){
+						fread(pModel->map[i], sizeof(float), SIZEMAP, in);
+					}
+
+					
+					for (int i = 0; i < SIZEMAP; i++){
+						fread(pModel->map2[i], sizeof(Surface), SIZEMAP, in);
+					}
+					
+		 			for (int i = 0; i < SIZEMAP; i++){
+						for (int j = 0; j < SIZEMAP; j++){
+							debug("%s", pModel->map2[i][j]);
+						}
+						debug("\n");
+					}
+    		
+					fclose(in);*/
 				}		
 				break;
 			case 18:
@@ -101,11 +127,6 @@ void draw_menu(Screen* pScreen, Model* pModel, int id, char status){
 				drawText(pScreen, 16, 24, "Left", 0);
 				drawText(pScreen, 16, 30, "Back", 0);
 			}
-			break;
-		case 3:
-			drawText(pScreen, 15, 6, "Game 1", 1);
-			drawText(pScreen, 15, 12, "Game 2", 0);
-			drawText(pScreen, 16, 18, "Back", 0);
 			break;
 		case 4:
 			drawText(pScreen, 14, 6, "New game", 1);

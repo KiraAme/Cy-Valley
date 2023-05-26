@@ -9,7 +9,7 @@
 
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 21
-#define SIZEMAP 1000
+#define SIZEMAP 21
 #define FLOWERREQ 1
 #define MINERALREQ1 1
 #define MINERALREQ2 15

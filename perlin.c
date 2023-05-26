@@ -180,8 +180,10 @@ void replaceWithBiomes2(Surface **map){
 			if(map[i][j].name == "🌱" && rand() % 500 < 2){
 				map[i][j] = crate;
 			}
+			//debug("%s", map[i][j].name);
 		}
 	}
 	
 }
+
 

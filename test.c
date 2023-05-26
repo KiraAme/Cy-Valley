@@ -3,7 +3,6 @@
 
 void init(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
-	
 	//Player's inventory and health when spawned
 	pModel->p1.health_point=3;
 	pModel->p1.quest_advancement=0;
@@ -25,7 +24,7 @@ void init(void* pUserData, Screen* pScreen){
 	//
 	pModel->sec= 0;
     pModel->min= 0;
-        
+    
 	//Player's coordinates when spawned	
 	pModel->x = SIZEMAP/2;
 	pModel->y = SIZEMAP/2;
@@ -78,15 +77,15 @@ void init(void* pUserData, Screen* pScreen){
 	initialize_gradient_table(gradient);
 	
 	pModel->map = (float**)malloc(SIZEMAP*sizeof(float*));
-    for (int i=0; i<SIZEMAP; i++) {
-        pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
-    }
+  	for(int i=0; i<SIZEMAP; i++){
+       		 pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
+  	}
     
     pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
-    for (int i=0; i<SIZEMAP; i++) {
-        pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
+   	for(int i=0; i<SIZEMAP; i++){
+		pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
     }
-
+    	
 	double i, j;
 	for(i=0; i<SIZEMAP; i++){
 		for(j=0; j<SIZEMAP; j++){
@@ -106,7 +105,7 @@ void init(void* pUserData, Screen* pScreen){
 	replaceWithBiomes(pModel->map, pModel->map2);
 	replaceWithBiomes2(pModel->map2);
 	
-	while(pModel->map2[pModel->x][pModel->y].go_through!=1){ 
+	while(pModel->map2[pModel->x][pModel->y].go_through!=1 || pModel->map2[pModel->x][pModel->y].id==10){ 
 		//debug("+");
 		pModel->map2[pModel->x][pModel->y++];
 		pModel->map2[pModel->x][pModel->cam_y++];
@@ -123,7 +122,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	}
 	else if(pModel->end==1){
 	}
-	else{	
+	else{
 		//player going down
 		if(pEvt->code == KEY_S_LOWER||pEvt->code == KEY_S){
 		 //movement with crate
@@ -385,7 +384,41 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 				pModel->p1.inventory.ore_mineral++;
 				pModel->score+=30;
 			}
-		}				
+		}
+		if(pEvt->code == KEY_M_LOWER){
+			FILE* out = fopen("save.txt", "wb");
+			fwrite(pModel, sizeof(Model), 1, out);
+
+			// Écriture du tableau map
+			for (int i = 0; i < SIZEMAP; i++){
+    			fwrite(pModel->map[i], sizeof(float), SIZEMAP, out);
+    		}
+
+			// Écriture du tableau map2
+			for (int i = 0; i < SIZEMAP; i++){
+				fwrite(pModel->map2[i], sizeof(Surface), SIZEMAP, out);
+			}
+			
+			fclose(out);
+		}
+		if(pEvt->code == KEY_N_LOWER){
+			FILE* in = fopen("save.txt", "rb");
+			if(in == NULL){
+				debug("ok");
+			}
+			
+			fread(pModel, sizeof(Model), 1, in);		
+			
+			for (int i = 0; i < SIZEMAP; i++){
+				fread(pModel->map[i], sizeof(float), SIZEMAP, in);
+			}
+			
+			for (int i = 0; i < SIZEMAP; i++){
+				fread(pModel->map2[i], sizeof(Surface), SIZEMAP, in);
+			}
+    		
+			fclose(in);
+		}			
 				
 	}
 	
@@ -426,9 +459,9 @@ void draw(void* pUserData, Screen* pScreen){
 	sprintf(buffer12,"%d",MINERALREQ1);
 	sprintf(buffer13,"%d",MINERALREQ2);
 	sprintf(buffer14,"%d",FISHREQ);
-	long display_timestamp = time(NULL);
+	long display_timestamp = time (NULL);
 	int elapsed = display_timestamp - pModel->starttimestamp;
-	pModel->sec = elapsed%60;
+	pModel->sec= elapsed%60;
         pModel->min= elapsed/60;
         if(pModel->min==0 && pModel->sec==0){
                 clear();
@@ -444,7 +477,7 @@ void draw(void* pUserData, Screen* pScreen){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
-	else if(pModel->score>=10000){
+	else if( pModel->score>=10000){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you reached the limit of the score !",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
@@ -456,21 +489,21 @@ void draw(void* pUserData, Screen* pScreen){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
-	/*else if(pModel->min>=MIN_MAX && pModel->sec>=SEC_MAX){
+	else if(pModel->min>=MIN_MAX && pModel->sec>=SEC_MAX){
 	        clear();
 	        drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"Time is ruuniiiiing ouuut",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
-	}*/
+	}
 	else{
-		
 		for(int i=0; i<CAMERA_SIZE; i++){
 			for(int j=0; j<CAMERA_SIZE; j++){
 				int dif_x = pModel->x - pModel->cam_x - CAMERA_SIZE/2;
 				int dif_y = pModel->y - pModel->cam_y - CAMERA_SIZE/2;
 				int i2 = i + (pScreen->width-CAMERA_SIZE)/2;
 				int j2 = j + (pScreen->height-CAMERA_SIZE)/2;
+				
 				if(i==CAMERA_SIZE/2 + dif_x && j==CAMERA_SIZE/2 + dif_y){
 					drawText(pScreen, i2, j2, "🐰", 0);
 				
@@ -479,7 +512,6 @@ void draw(void* pUserData, Screen* pScreen){
 					drawText(pScreen, i2, j2, pModel->map2[i+pModel->cam_x][j+pModel->cam_y].name, 0);
 				}
 			}
-		
 			
 		}
 		for(int i=0; i<pModel->p1.health_point*3;i=i+3){
@@ -504,7 +536,9 @@ void draw(void* pUserData, Screen* pScreen){
 		}
 		if(pModel->map2[pModel->x][pModel->y].id==9){
 			if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<5){
-				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me 20 minerals and i'll forge you the best sword ever made", 0);
+				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
+				drawText(pScreen, CAMERA_SIZE+9,CAMERA_SIZE+10, buffer13, 0);
+				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " minerals and I'll give you the best sword ever made", 0);
 			}
 			else{
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE + 10, "thank you little rabbit here's your sword", 0);
@@ -558,7 +592,16 @@ int main() {
 	
 	
 	
-	gameLoop(createGame(100, 50, &model, &cb, 0));
+	gameLoop(createGame(100, 40, &model, &cb, 0));
+	
+	for(int i=0; i<SIZEMAP; i++)
+		free(model.map[i]);
+	free(model.map);
+	
+	for(int i=0; i<SIZEMAP; i++)
+		free(model.map2[i]);
+	free(model.map2);
 	  
 	return 0; 
-}
+}		
+				
