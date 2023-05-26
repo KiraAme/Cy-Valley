@@ -3,11 +3,14 @@
 void init(void* pUserData, Screen* pScreen){
   Model* pModel = (Model*)pUserData;
   //Memory allocation of map and map2 2D array
-  for(int j=0; j<100; j++){
-    pModel->map[j] = malloc(100 * sizeof(float));
-  }
-  for(int i=0; i<100; i++){
-    pModel->map2[i] = malloc(100 * sizeof(Surface));
+  pModel->map = (float**)malloc(SIZEMAP*sizeof(float*)); 
+  for (int i=0; i<SIZEMAP; i++) { 
+         pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float)); 
+  } 
+  
+  pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*)); 
+  for (int i=0; i<SIZEMAP; i++) { 
+         pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface)); 
   }
   //Player's inventory and health when spawned
   pModel->p1.health_point=3;
