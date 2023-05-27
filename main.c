@@ -1,5 +1,5 @@
 //export LD_LIBRARY_PATH=lib
-#include "jeu.h"
+#include "game.h"
 
 void init(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
@@ -13,16 +13,6 @@ void init(void* pUserData, Screen* pScreen){
 	pModel->p1.inventory.have_sword=0;
 	pModel->score=0;
 	pModel->crate_score=0;
-	
-	//
-	pModel->temp1.name="🌱";
-	pModel->temp1.brk=0;
-	pModel->temp1.take=1;
-	pModel->temp1.push=0;
-	pModel->temp1.go_through=1;
-	pModel->temp1.npc1.is_npc=0;
-	pModel->temp1.npc1.flower_num=0;
-	pModel->temp1.id=1;
 	
 	//
 	pModel->sec= 0;
