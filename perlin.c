@@ -77,7 +77,7 @@ double noise(double x, double y, int permutation[], double gradient[TABLE_SIZE][
 }
 
 
-void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP]){
+void replaceWithBiomes(float **tab, Surface **map){
 	Surface plain;
 	Surface beach;
 	Surface lake;
@@ -120,7 +120,7 @@ void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP
 	}
 }
 
-void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
+void replaceWithBiomes2(Surface **map){
 	Surface rock;
 	Surface farmer;
 	Surface tree;
@@ -180,8 +180,81 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 			if(map[i][j].name == "🌱" && rand() % 500 < 2){
 				map[i][j] = crate;
 			}
+			//debug("%s", map[i][j].name);
 		}
 	}
 	
 }
+
+void create_map(Model *pModel){
+	//farmer init
+	Surface farmer;
+	farmer.name="👨";
+	farmer.brk=0;
+	farmer.take=0;
+	farmer.push=0;
+	farmer.go_through=1;
+	farmer.npc1.is_npc=1;
+	farmer.npc1.flower_num=0;
+	farmer.npc1.fish_num=0;
+	farmer.npc1.ore_mineral=0;
+	farmer.id=5;
+	
+	//forger init
+	Surface forger;
+	forger.name="👷";
+	forger.brk=0;
+	forger.push=0;
+	forger.take=1;
+	forger.go_through=1;
+	forger.npc1.is_npc=1;
+	forger.npc1.ore_mineral=0;
+	forger.id=9;
+	
+	//map creation
+	srand(pModel->seed);
+	
+	int permutation[TABLE_SIZE];
+	double gradient[TABLE_SIZE][2];
+	
+	initialize_permutation_table(permutation);
+	initialize_gradient_table(gradient);
+	
+	pModel->map = (float**)malloc(SIZEMAP*sizeof(float*));
+  	for(int i=0; i<SIZEMAP; i++){
+       		 pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
+  	}
+    
+    pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
+   	for(int i=0; i<SIZEMAP; i++){
+		pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
+    }
+    	
+	double i, j;
+	for(i=0; i<SIZEMAP; i++){
+		for(j=0; j<SIZEMAP; j++){
+			pModel->map[(int)i][(int)j] = (int)noise(i/15, j/15, permutation, gradient);
+		}
+	}
+	
+	replaceWithBiomes(pModel->map, pModel->map2);
+	replaceWithBiomes2(pModel->map2);
+	
+	while(pModel->map2[pModel->x][pModel->y].go_through!=1 || pModel->map2[pModel->x][pModel->y].id==10){ 
+		//debug("+");
+		pModel->map2[pModel->x][pModel->y++];
+		pModel->map2[pModel->x][pModel->cam_y++];
+	}
+	if(pModel->x_farmer==0 && pModel->y_farmer==0){
+		pModel->map2[pModel->x-1][pModel->y]=farmer;
+		pModel->map2[pModel->x+1][pModel->y]=forger;
+		pModel->x_farmer=pModel->x;
+		pModel->y_farmer=pModel->y;
+	}
+	else{
+		pModel->map2[pModel->x_farmer-1][pModel->y_farmer]=farmer;
+		pModel->map2[pModel->x_farmer+1][pModel->y_farmer]=forger;
+	}
+}
+
 
