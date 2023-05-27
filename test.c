@@ -3,18 +3,16 @@
 
 void init(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
-	
 	//Player's inventory and health when spawned
 	pModel->p1.health_point=3;
 	pModel->p1.quest_advancement=0;
 	pModel->p1.inventory.flower_num=0;
-	pModel->p1.inventory.fish_num=0;
-	pModel->p1.inventory.ore_mineral=0;
+        pModel->p1.inventory.fish_num=0;
+        pModel->p1.inventory.ore_mineral=0;
 	pModel->p1.inventory.have_pickaxe=0;
 	pModel->p1.inventory.have_sword=0;
 	pModel->score=0;
-	pModel->cratescore=0;
-	pModel->timer=MIN_MAX*60+SEC_MAX;
+	pModel->crate_score=0;
 	
 	//
 	pModel->temp1.name="🌱";
@@ -27,38 +25,22 @@ void init(void* pUserData, Screen* pScreen){
 	pModel->temp1.id=1;
 	
 	//
-	pModel->sec= SEC_MAX;
-        pModel->min= MIN_MAX;
-        
+	pModel->sec= 0;
+        pModel->min= 0;
+        pModel->elapsed=0;
+        pModel->secglob= 0;
+    
+    //
+        pModel->seed=time(NULL);
+    
 	//Player's coordinates when spawned	
 	pModel->x = SIZEMAP/2;
 	pModel->y = SIZEMAP/2;
 	pModel->cam_x = pModel->x-CAMERA_SIZE/2;
 	pModel->cam_y = pModel->y-CAMERA_SIZE/2;
+	pModel->x_farmer = 0;
+	pModel->y_farmer = 0;
 	
-	//farmer init
-	Surface farmer;
-	farmer.name="👨";
-	farmer.brk=0;
-	farmer.take=0;
-	farmer.push=0;
-	farmer.go_through=1;
-	farmer.npc1.is_npc=1;
-	farmer.npc1.flower_num=0;
-	farmer.npc1.fish_num=0;
-	farmer.npc1.ore_mineral=0;
-	farmer.id=5;
-	
-	//forger init
-	Surface forger;
-	forger.name="👷";
-	forger.brk=0;
-	forger.push=0;
-	forger.take=1;
-	forger.go_through=1;
-	forger.npc1.is_npc=1;
-	forger.npc1.ore_mineral=0;
-	forger.id=9;
 	//The y arrow's coordinates 
 	pModel->arrow_position = 6;
 	
@@ -70,54 +52,6 @@ void init(void* pUserData, Screen* pScreen){
 	
 	//Game status (1 = Main menu, 2 = Settings, 3 = Load menu, 4 = New game or load, 5 = Game)
 	pModel->game_status = 1;
-	//map creation
-	int permutation[TABLE_SIZE];
-	double gradient[TABLE_SIZE][2];
-	
-	srand(time(NULL));
-	pModel->seed = rand();
-	srand(pModel->seed);
-	
-	initialize_permutation_table(permutation);
-	initialize_gradient_table(gradient);
-	
-	pModel->map = (float**)malloc(SIZEMAP*sizeof(float*));
-        for (int i=0; i<SIZEMAP; i++) {
-          pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
-        }
-    
-        pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
-        for (int i=0; i<SIZEMAP; i++) {
-          pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
-        }
-
-	double i, j;
-	for(i=0; i<SIZEMAP; i++){
-		for(j=0; j<SIZEMAP; j++){
-			pModel->map[(int)i][(int)j] = (int)noise(i/15, j/15, permutation, gradient);
-			/*if(i%2==0){
-				pModel->map2[i][j]="💧";
-			}
-			else if(j%2==0){
-				pModel->map2[i][j]="🌱";
-			}
-			else{
-				pModel->map2[i][j]="⏳";
-			}*/
-		}
-	}
-	
-	replaceWithBiomes(pModel->map, pModel->map2);
-	replaceWithBiomes2(pModel->map2);
-	
-	while(pModel->map2[pModel->x][pModel->y].go_through!=1 || pModel->map2[pModel->x][pModel->y].id==10){ 
-		//debug("+");
-		pModel->map2[pModel->x][pModel->y++];
-		pModel->map2[pModel->x][pModel->cam_y++];
-	}
-	
-	pModel->map2[pModel->x-1][pModel->y]=farmer;
-	pModel->map2[pModel->x+1][pModel->y]=forger;
 }
 
 void event(void* pUserData, Screen* pScreen, Event* pEvt){
@@ -127,7 +61,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	}
 	else if(pModel->end==1){
 	}
-	else{	
+	else{
 		//player going down
 		if(pEvt->code == KEY_S_LOWER||pEvt->code == KEY_S){
 		 //movement with crate
@@ -138,7 +72,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y++;
 	  				pModel->cam_y++;
-	  				pModel->cratescore+=1;
+	  				pModel->crate_score+=1;
 	  		}
 	  		//movement 
 			else if(pModel->cam_y<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x][pModel->y+1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
@@ -152,7 +86,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x][pModel->y+1]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y++;
-	  			        pModel->cratescore+=1;
+	  			        pModel->crate_score+=1;
 	  		}
 	  		//movement with map border
 	  		else if(pModel->y<SIZEMAP - 1 && pModel->map2[pModel->x][pModel->y+1].go_through ){
@@ -182,7 +116,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y--;
 	  				pModel->cam_y--;
-	  				pModel->cratescore+=1;
+	  				pModel->crate_score+=1;
 	  		}
 	  		//movement
 			else if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
@@ -196,23 +130,14 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x][pModel->y-1]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y--;
-	  				pModel->cratescore+=1;
+	  				pModel->crate_score+=1;
 	  		}
 	  		//movement with map border
 	  		else if(pModel->y>0 && pModel->map2[pModel->x][pModel->y-1].go_through ){
 				pModel->y--;
 			}
 			//interaction with monster
-			if(pModel->map2[pModel->x][pModel->y].id==8 && pModel->p1.health_point>0 ){
-				if( pModel->p1.inventory.have_sword){
-					pModel->map2[pModel->x][pModel->y].name="🌱";
-					pModel->map2[pModel->x][pModel->y].take=1;
-					pModel->score+=150;
-				}
-				else{
-					pModel->p1.health_point--;
-				}
-			}
+      
 			if(pModel->map2[pModel->x][pModel->y].id==10 && pModel->p1.health_point>0 ){
 				if( pModel->p1.inventory.have_sword){
 					pModel->map2[pModel->x][pModel->y].name="🌱";
@@ -233,7 +158,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x++;
 	  				pModel->cam_x++;
-	  				pModel->cratescore+=1;
+	  				pModel->crate_score+=1;
 	  		}
 			else if(pModel->cam_x<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x+1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2 ){	
 	  			pModel->x++;
@@ -245,7 +170,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x+1][pModel->y]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x++;
-	  				pModel->cratescore+=1;
+	  				pModel->crate_score+=1;
 	  		}
                         else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].go_through ){
 				pModel->x++;
@@ -272,7 +197,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x--;
 	  				pModel->cam_x--;
-	  				pModel->cratescore+=1;
+	  				pModel->crate_score+=1;
 	  		}
 			else if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){
 	  			pModel->x--;
@@ -284,7 +209,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x-1][pModel->y]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x--;
-	  				pModel->cratescore+=1;
+	  				pModel->crate_score+=1;
 	  		}
 	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].go_through ){
 				pModel->x--;
@@ -390,63 +315,25 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 				pModel->score+=30;
 			}
 		}
-		/*if(pEvt->code == KEY_M_LOWER){
-			FILE* out = fopen("save.txt", "wb");
-			fwrite(pModel, sizeof(Model), 1, out);
-
-			// Écriture du tableau map
-			for (int i = 0; i < SIZEMAP; i++){
-    			fwrite(pModel->map[i], sizeof(float), SIZEMAP, out);
-    		        }
-
-			// Écriture du tableau map2
-			for (int i = 0; i < SIZEMAP; i++){
-				fwrite(pModel->map2[i], sizeof(Surface), SIZEMAP, out);
-			}
-			
-			fclose(out);
-		}
-		if(pEvt->code == KEY_N_LOWER){
-			FILE* in = fopen("save.txt", "rb");
-			if(in == NULL){
-				exit(110);
-			}
-			
-			fread(pModel, sizeof(Model), 1, in);
-			//debug("ok");
-                        ///debug("ok");
-		        //free(pModel->map[0]);
-	                //free(pModel->map);
-	
-	                //debug("ok");
-		        //free(pModel->map2[0]);
-	                //free(pModel->map2);
-	                pModel->map = (float**)malloc(SIZEMAP*sizeof(float*));
-                        debug("ok");
-                        pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
-			for (int i = 0; i < SIZEMAP; i++){
-			        debug("ok");
-			        pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
-				fread(pModel->map[i], sizeof(float), SIZEMAP, in);
-			}
-			
-			for (int i = 0; i < SIZEMAP; i++){
-			        debug("ok");
-			        
-			        pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
-				fread(pModel->map2[i], sizeof(Surface), SIZEMAP, in);
-			      
-			}
-    		
-			fclose(in);
-		}*/
-				
+		if(pEvt->code == KEY_M_LOWER){
+			saveModel(pModel, "save.bin");
+		}					
 	}
 	
 	clear();
 }
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
+        Model* pModel = (Model*)pUserData;
+        pModel->elapsed+=1;
+        if(pModel->elapsed==60){
+            pModel->secglob+=1;
+            pModel->elapsed=0;
+            
+        }
+
+	pModel->sec = pModel->secglob%60;
+        pModel->min=pModel->secglob/60;
 	return 0;   	
 }
 void draw(void* pUserData, Screen* pScreen){
@@ -480,12 +367,7 @@ void draw(void* pUserData, Screen* pScreen){
 	sprintf(buffer12,"%d",MINERALREQ1);
 	sprintf(buffer13,"%d",MINERALREQ2);
 	sprintf(buffer14,"%d",FISHREQ);
-	long display_timestamp = time(NULL);
-	pModel->elapsed = display_timestamp - pModel->starttimestamp;
-
-	pModel->sec = (pModel->timer - pModel->elapsed)%60;
-        pModel->min= (pModel->timer - pModel->elapsed)/60;
-        if(pModel->min==MIN_MAX && pModel->sec==SEC_MAX){
+        if(pModel->min==0 && pModel->sec==0){
                 clear();
         }
         
@@ -499,14 +381,14 @@ void draw(void* pUserData, Screen* pScreen){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
-	else if(pModel->score>=SCORE_LIMIT){
-		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you reached the limit of the score !",0);
+	else if( pModel->crate_score>=CRATE_SCORELIM){
+		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you moved a crate a looooooooooooooooot of time!",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
-	else if( pModel->cratescore>=10){
-		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you moved a crate a looooot of times !",0);
+	else if( pModel->score>=SCORE_LIMIT){
+		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you reached the limit of the score !",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
@@ -517,7 +399,7 @@ void draw(void* pUserData, Screen* pScreen){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
-	else if(pModel->min<=0 && pModel->sec<=0){
+	else if(pModel->min>=MIN_MAX && pModel->sec>=SEC_MAX){
 	        clear();
 	        drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"Time is ruuniiiiing ouuut",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
@@ -525,13 +407,13 @@ void draw(void* pUserData, Screen* pScreen){
 		pModel->end=1;
 	}
 	else{
-		
 		for(int i=0; i<CAMERA_SIZE; i++){
 			for(int j=0; j<CAMERA_SIZE; j++){
 				int dif_x = pModel->x - pModel->cam_x - CAMERA_SIZE/2;
 				int dif_y = pModel->y - pModel->cam_y - CAMERA_SIZE/2;
 				int i2 = i + (pScreen->width-CAMERA_SIZE)/2;
 				int j2 = j + (pScreen->height-CAMERA_SIZE)/2;
+				
 				if(i==CAMERA_SIZE/2 + dif_x && j==CAMERA_SIZE/2 + dif_y){
 					drawText(pScreen, i2, j2, "🐰", 0);
 				
@@ -540,11 +422,10 @@ void draw(void* pUserData, Screen* pScreen){
 					drawText(pScreen, i2, j2, pModel->map2[i+pModel->cam_x][j+pModel->cam_y].name, 0);
 				}
 			}
-		
 			
 		}
 		for(int i=0; i<pModel->p1.health_point*3;i=i+3){
-			drawText(pScreen, (pScreen->width-CAMERA_SIZE)/2+i,44 ,"❤️",0);
+			drawText(pScreen,0+i,3,"❤️",0);
 		}
 		if(pModel->map2[pModel->x][pModel->y].id==5){
 			if(pModel->p1.quest_advancement==0){
@@ -565,9 +446,9 @@ void draw(void* pUserData, Screen* pScreen){
 		}
 		if(pModel->map2[pModel->x][pModel->y].id==9){
 			if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<5){
-			        drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
+				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
 				drawText(pScreen, CAMERA_SIZE+9,CAMERA_SIZE+10, buffer13, 0);
-				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " minerals and I will give you the best sword", 0);
+				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " minerals and I'll give you the best sword ever made", 0);
 			}
 			else{
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE + 10, "thank you little rabbit here's your sword", 0);
@@ -621,15 +502,10 @@ int main() {
 	
 	
 	
-	gameLoop(createGame(100, 50, &model, &cb, 0));
-	for(int i=0; i<SIZEMAP; i++){
-		free(model.map[i]);
-	}
-	free(model.map);
+	gameLoop(createGame(100, 40, &model, &cb, 0));
 	
-	for(int i=0; i<SIZEMAP; i++){
-		free(model.map2[i]);
-        }
-	free(model.map2);
+
+	  
 	return 0; 
-}
+}		
+				
