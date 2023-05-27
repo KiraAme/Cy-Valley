@@ -372,10 +372,10 @@ void draw(void* pUserData, Screen* pScreen){
 	char buffer8[5];
 	char buffer9[20];
 	char buffer10[20];
-	char buffer11[5];
-	char buffer12[5];
-	char buffer13[5];
-	char buffer14[5];
+	char buffer11[15];
+	char buffer12[15];
+	char buffer13[15];
+	char buffer14[15];
 	sprintf(buffer,"%d",pModel->x);
 	sprintf(buffer2,"%d",pModel->y);
 	sprintf(buffer3,"%d",pModel->p1.inventory.flower_num);
@@ -460,16 +460,22 @@ void draw(void* pUserData, Screen* pScreen){
 		//text npc farmer
 		if(pModel->map2[pModel->x][pModel->y].id==5){
 			if(pModel->p1.quest_advancement==0){
+			        int flowerupd=FLOWERREQ-pModel->map2[pModel->x][pModel->y].npc1.flower_num;
+			        sprintf(buffer11,"%d",flowerupd);
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
 				drawText(pScreen, CAMERA_SIZE+9,CAMERA_SIZE+10, buffer11, 0);
 				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " flowers and i'll give you a pickaxe", 0);
 				}
 			if(pModel->p1.quest_advancement==1){
+			        int mineralq1upd=MINERALREQ1-pModel->map2[pModel->x][pModel->y].npc1.ore_mineral;
+			        sprintf(buffer12,"%d",mineralq1upd);
 			        drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
 				drawText(pScreen, CAMERA_SIZE+9,CAMERA_SIZE+10, buffer12, 0);
 				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " minerals and i'll give you the power of going in the water", 0);
 			}
 			if(pModel->p1.quest_advancement==2){
+			        int fishupd=FISHREQ-pModel->map2[pModel->x][pModel->y].npc1.fish_num;
+			        sprintf(buffer14,"%d",fishupd);
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
 				drawText(pScreen, CAMERA_SIZE+9,CAMERA_SIZE+10, buffer14, 0);
 				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " fishes and you will be blessed by the forest", 0);
@@ -478,6 +484,8 @@ void draw(void* pUserData, Screen* pScreen){
 		//test npc forger
 		if(pModel->map2[pModel->x][pModel->y].id==9){
 			if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<5){
+			        int mineralq2upd=MINERALREQ2-pModel->map2[pModel->x][pModel->y].npc1.ore_mineral;
+			        sprintf(buffer13,"%d",mineralq2upd);
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
 				drawText(pScreen, CAMERA_SIZE+9,CAMERA_SIZE+10, buffer13, 0);
 				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " minerals and I'll give you the best sword ever made", 0);

@@ -28,8 +28,8 @@ void loadModel(Model *model, char *filename) {
     create_map(model);
     for(int i=0;i<SIZEMAP;i++){
 	for(int j=0;j<SIZEMAP;j++){
-		if(pModel->map2[i][j].id==3 || pModel->map2[i][j].id==7){
-			pModel->map2[i][j].go_through=1;
+		if(model->map2[i][j].id==3 || model->map2[i][j].id==7){
+			model->map2[i][j].go_through=1;
 										
 		}
 	}			
