@@ -10,12 +10,12 @@
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 21
 #define SIZEMAP 100
-#define FLOWERREQ 1
-#define MINERALREQ1 1
-#define MINERALREQ2 15
-#define FISHREQ 1
-#define MIN_MAX 5
-#define SEC_MAX 5
+#define FLOWERREQ 40
+#define MINERALREQ1 20
+#define MINERALREQ2 25
+#define FISHREQ 15
+#define MIN_MAX 10
+#define SEC_MAX 0
 #define SCORE_LIMIT 10000
 #define CRATE_SCORELIM 10
 
