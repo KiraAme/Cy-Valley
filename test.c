@@ -4,17 +4,16 @@
 
 
 int main() {
-	Model model;
+        Model model;
 	Callbacks cb;
-	cb.cbInit= init;        
-	cb.cbEvent= event;        
-	cb.cbUpdate= update;
-	cb.cbDraw= draw;
-	cb.cbFinish= finish;
+	cb.cbInit = init; 
+	cb.cbEvent = event;        
+	cb.cbUpdate = update;
+	cb.cbDraw = draw;
+	cb.cbFinish = finish;
 	
+	gameLoop(createGame(60, 40, &model, &cb, 0));
 	
-	
-	gameLoop(createGame(130, 50, &model, &cb, 0));
-	  
+      
 	return 0; 
 }

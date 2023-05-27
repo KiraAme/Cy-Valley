@@ -77,7 +77,7 @@ double noise(double x, double y, int permutation[], double gradient[TABLE_SIZE][
 }
 
 
-void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP]){
+void replaceWithBiomes(float **tab, Surface **map){
 	Surface plain;
 	Surface beach;
 	Surface lake;
@@ -120,7 +120,7 @@ void replaceWithBiomes(float tab[SIZEMAP][SIZEMAP], Surface map[SIZEMAP][SIZEMAP
 	}
 }
 
-void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
+void replaceWithBiomes2(Surface **map){
 	Surface rock;
 	Surface farmer;
 	Surface tree;
@@ -180,8 +180,10 @@ void replaceWithBiomes2(Surface map[SIZEMAP][SIZEMAP]){
 			if(map[i][j].name == "🌱" && rand() % 500 < 2){
 				map[i][j] = crate;
 			}
+			//debug("%s", map[i][j].name);
 		}
 	}
 	
 }
+
 
