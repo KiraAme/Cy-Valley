@@ -210,7 +210,15 @@ void create_map(Model *pModel){
 	forger.npc1.is_npc=1;
 	forger.npc1.ore_mineral=0;
 	forger.id=9;
-	
+	//temp for moving boxes
+	pModel->temp1.name="🌱";
+	pModel->temp1.brk=0;
+	pModel->temp1.take=1;
+	pModel->temp1.push=0;
+	pModel->temp1.go_through=1;
+	pModel->temp1.npc1.is_npc=0;
+	pModel->temp1.npc1.flower_num=0;
+	pModel->temp1.id=1;
 	//map creation
 	srand(pModel->seed);
 	
@@ -225,10 +233,10 @@ void create_map(Model *pModel){
        		 pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
   	}
     
-    pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
+        pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
    	for(int i=0; i<SIZEMAP; i++){
 		pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
-    }
+        }
     	
 	double i, j;
 	for(i=0; i<SIZEMAP; i++){

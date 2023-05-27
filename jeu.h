@@ -10,14 +10,14 @@
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 21
 #define SIZEMAP 100
-#define FLOWERREQ 11
-#define MINERALREQ1 6
-#define MINERALREQ2 6
-#define FISHREQ 4
+#define FLOWERREQ 40
+#define MINERALREQ1 20
+#define MINERALREQ2 25
+#define FISHREQ 15
 #define MIN_MAX 10
 #define SEC_MAX 0
 #define SCORE_LIMIT 10000
-#define CRATE_SCORELIM 10
+#define CRATE_SCORELIM 1000
 
 typedef struct{
 	int is_npc;
