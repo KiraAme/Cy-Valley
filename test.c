@@ -325,14 +325,15 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
         Model* pModel = (Model*)pUserData;
-        pModel->elapsed+=1;
-        if(pModel->elapsed==60){
-            pModel->secglob+=1;
-            pModel->elapsed=0;
-            
-        }
+        if(pModel->game_status==5){
+		    pModel->elapsed+=1;
+		    if(pModel->elapsed==100){
+		        pModel->secglob+=1;
+		        pModel->elapsed=0;
+		    }
+		}
 
-	pModel->sec = pModel->secglob%60;
+		pModel->sec = pModel->secglob%60;
         pModel->min=pModel->secglob/60;
 	return 0;   	
 }
