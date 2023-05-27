@@ -1,6 +1,6 @@
 #include "jeu.h"
 
-void draw(void* pUserData, Screen* pScreen){
+/*void draw(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
 	int id = 2;
 	char buffer[4];
@@ -147,4 +147,4 @@ void draw(void* pUserData, Screen* pScreen){
 		}
 		//drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE*2+1,(pScreen->height-CAMERA_SIZE)/2+CAMERA_SIZE-1,9,'-',0); 
 	}
-}
+}*/

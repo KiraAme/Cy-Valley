@@ -95,3 +95,17 @@ void handlePlayerLeft(Model *pModel);
 void handlePlayerInteraction(Model *pModel);
 void handlePlayerA(Model *pModel);
 
+void draw_completed_quests(Screen* pScreen, Model* pModel, char* buffer);
+void draw_max_score_reached(Screen* pScreen, Model* pModel, char* buffer);
+void draw_player_died(Screen* pScreen, Model* pModel, char* buffer);
+void draw_time_running_out(Screen* pScreen, Model* pModel, char* buffer);
+void draw_game_map(Screen* pScreen, Model* pModel);
+void draw_player_health(Screen* pScreen, Model* pModel);
+void draw_quest_text(Screen* pScreen, Model* pModel, char* buffer11, char* buffer12, char* buffer14, char* buffer13);
+void draw_inventory(Screen* pScreen, Model* pModel, char* buffer3, char* buffer4, char* buffer5, char* buffer6, char* buffer7);
+void draw_inventory_counts(Screen* pScreen, Model* pModel, char* buffer3, char* buffer4, char* buffer5, char* buffer6, char* buffer7);
+void draw_divider_lines(Screen* pScreen);
+void draw_timer(Screen* pScreen, Model* pModel, char* buffer9, char* buffer10);
+void draw_score(Screen* pScreen, Model* pModel, char* buffer8);
+void draw_ui(Screen* pScreen, Model* pModel);
+

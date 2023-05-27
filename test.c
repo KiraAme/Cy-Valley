@@ -10,7 +10,7 @@ int main() {
 	cb.cbDraw = draw;
 	cb.cbFinish = finish;
 	
-	gameLoop(createGame(60, 40, &model, &cb, 0));
+	gameLoop(createGame(100, 40, &model, &cb, 0));
 	
       
 	return 0; 
