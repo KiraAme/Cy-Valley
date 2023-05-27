@@ -1,10 +1,8 @@
 //export LD_LIBRARY_PATH=lib
 #include "jeu.h"
 
-
-
 int main() {
-        Model model;
+    Model model;
 	Callbacks cb;
 	cb.cbInit = init; 
 	cb.cbEvent = event;        

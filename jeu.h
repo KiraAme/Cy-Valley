@@ -7,18 +7,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
-#ifndef INITIALDATA_C
-#ifndef MOVEMENTS_C
-#ifndef UPDATE_C
-#ifndef DISPLAY_C
-#ifndef END_FINISH_C
-#define INITIALDATA_C
-#define MOVEMENTS_C
-#define UPDATE_C
-#define DISPLAY_C
-#define END_FINISH_C
-
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 21
 #define SIZEMAP 21
@@ -99,10 +87,11 @@ int update(void* pUserData, Screen* pScreen, unsigned long deltaTime);
 void draw(void* pUserData, Screen* pScreen);
 void finish(void* pUserData);
 
-#endif
-#endif
-#endif
-#endif
-#endif
-
+void handlePlayerMov(Model *pModel,Event* pEvt);
+void handlePlayerDown(Model *pModel);
+void handlePlayerUp(Model* pModel);
+void handlePlayerRight(Model *pModel);
+void handlePlayerLeft(Model *pModel);
+void handlePlayerInteraction(Model *pModel);
+void handlePlayerA(Model *pModel);
 

@@ -10,7 +10,9 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	else{
 	        handlePlayerMov(pModel, pEvt);
        }
+    clear();
 }
+
 void handlePlayerMov(Model *pModel,Event* pEvt){
         if(pEvt->code == KEY_S_LOWER || pEvt->code == KEY_Z){
                 handlePlayerDown(pModel);
@@ -164,6 +166,7 @@ void handlePlayerRight(Model *pModel){
 	        }
         }
 }
+
 void handlePlayerLeft(Model *pModel){
         if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].id==8 && pModel->map2[pModel->x-2][pModel->y].go_through){
 	      pModel->temp2=pModel->map2[pModel->x-2][pModel->y];

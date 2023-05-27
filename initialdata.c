@@ -30,6 +30,7 @@ void init(void* pUserData, Screen* pScreen){
         //
         pModel->sec= 0;
         pModel->min= 0;
+        pModel->score= 0;
         //Player's coordinates when spawned	
         pModel->x = SIZEMAP/2;
         pModel->y = SIZEMAP/2;
