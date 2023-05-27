@@ -274,7 +274,7 @@ void event2(void* pUserData, Screen* pScreen, Event* pEvt){
 							pModel->p1.inventory.ore_mineral--;
 					}
 					//give you sword
-					if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral==5){
+					if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral==MINERALRQ2){
 						pModel->p1.inventory.have_sword=1;
 						pModel->score+=1000;
 					}
