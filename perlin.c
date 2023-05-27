@@ -1,4 +1,4 @@
-#include "jeu.h"
+#include "game.h"
 
 void initialize_permutation_table(int permutation[]){
     int i, j, tmp;
@@ -211,6 +211,15 @@ void create_map(Model *pModel){
 	forger.npc1.is_npc=1;
 	forger.npc1.ore_mineral=0;
 	forger.id=9;
+	//temp for crate
+	pModel->temp1.name="🌱";
+	pModel->temp1.brk=0;
+	pModel->temp1.take=1;
+	pModel->temp1.push=0;
+	pModel->temp1.go_through=1;
+	pModel->temp1.npc1.is_npc=0;
+	pModel->temp1.npc1.flower_num=0;
+	pModel->temp1.id=1;
 	
 	//map creation
 	srand(pModel->seed);
