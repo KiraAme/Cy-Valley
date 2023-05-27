@@ -16,14 +16,14 @@
 #define MIN_MAX 5
 #define SEC_MAX 0
 
-typedef struct{
+typedef struct{ //structure npc
 	int is_npc;
 	int flower_num;
 	int ore_mineral;
 	int fish_num;
 }Npc;
 
-typedef struct{
+typedef struct{ //structure surface
   char *name;
   int brk ;
   int take ;
@@ -33,7 +33,7 @@ typedef struct{
   int id;
 } Surface;
 
-typedef struct{
+typedef struct{ //Structure inventaire
 	int flower_num;
 	int have_pickaxe;
 	int have_sword;
@@ -42,12 +42,12 @@ typedef struct{
 
 } Inv;
 
-typedef struct{
+typedef struct{ //Structure player
 	int health_point;
 	Inv inventory;
 	int quest_advancement;
 } Player;
-typedef struct{
+typedef struct{ //Structure of the game's model
   int x;
   int y;
   int cam_x;
@@ -76,7 +76,7 @@ typedef struct{
 
 
 
-
+//Calling functions in .c files
 
 void initialize_permutation_table(int permutation[]);
 void initialize_gradient_table(double gradient[TABLE_SIZE][2]);
