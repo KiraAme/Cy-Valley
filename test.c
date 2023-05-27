@@ -72,7 +72,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y++;
 	  				pModel->cam_y++;
-	  				pModel->crate_score+=1;
+	  				pModel->score+=1;
 	  		}
 	  		//movement 
 			else if(pModel->cam_y<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x][pModel->y+1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
@@ -86,7 +86,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x][pModel->y+1]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y++;
-	  			        pModel->crate_score+=1;
+	  			        pModel->score+=1;
 	  		}
 	  		//movement with map border
 	  		else if(pModel->y<SIZEMAP - 1 && pModel->map2[pModel->x][pModel->y+1].go_through ){
@@ -108,7 +108,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 		}
 		//player going up
 		if(pEvt->code == KEY_Z_LOWER||pEvt->code == KEY_Z){
-		//movement with crate
+			//movement with crate
 			if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].id==8 && pModel->map2[pModel->x][pModel->y-2].go_through){
 	  				pModel->temp2=pModel->map2[pModel->x][pModel->y-2];
 	  				pModel->map2[pModel->x][pModel->y-2]=pModel->map2[pModel->x][pModel->y-1];
@@ -116,7 +116,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y--;
 	  				pModel->cam_y--;
-	  				pModel->crate_score+=1;
+	  				pModel->score+=1;
 	  		}
 	  		//movement
 			else if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
@@ -130,14 +130,14 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x][pModel->y-1]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y--;
-	  				pModel->crate_score+=1;
+	  				pModel->score+=1;
 	  		}
 	  		//movement with map border
 	  		else if(pModel->y>0 && pModel->map2[pModel->x][pModel->y-1].go_through ){
 				pModel->y--;
 			}
+			
 			//interaction with monster
-      
 			if(pModel->map2[pModel->x][pModel->y].id==10 && pModel->p1.health_point>0 ){
 				if( pModel->p1.inventory.have_sword){
 					pModel->map2[pModel->x][pModel->y].name="🌱";
@@ -145,12 +145,14 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 					pModel->score+=150;
 				}
 				else{
+					//lost 1 hp
 					pModel->p1.health_point--;
 				}
 			}
 		}
 		//player going right
 		if(pEvt->code == KEY_D_LOWER ||pEvt->code == KEY_D ){
+			//movement with crate
 			if(pModel->cam_x<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x+1][pModel->y].id==8 && pModel->map2[pModel->x+2][pModel->y].go_through){
 	  				pModel->temp2=pModel->map2[pModel->x+2][pModel->y];
 	  				pModel->map2[pModel->x+2][pModel->y]=pModel->map2[pModel->x+1][pModel->y];
@@ -158,21 +160,24 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x++;
 	  				pModel->cam_x++;
-	  				pModel->crate_score+=1;
+	  				pModel->score+=1;
 	  		}
+	  		//movement
 			else if(pModel->cam_x<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x+1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2 ){	
 	  			pModel->x++;
 	  			pModel->cam_x++;
 	  		}
+	  		//movement with map border and crate
 	  		else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].id==8 && pModel->map2[pModel->x+2][pModel->y].go_through){
 	  				pModel->temp2=pModel->map2[pModel->x+2][pModel->y];
 	  				pModel->map2[pModel->x+2][pModel->y]=pModel->map2[pModel->x+1][pModel->y];
 	  				pModel->map2[pModel->x+1][pModel->y]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x++;
-	  				pModel->crate_score+=1;
+	  				pModel->score+=1;
 	  		}
-                        else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].go_through ){
+	  		//movement with map border
+            else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].go_through ){
 				pModel->x++;
 			}
 			//interaction with monster
@@ -190,6 +195,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 		}
 		//player going left
 		if(pEvt->code == KEY_Q_LOWER||pEvt->code == KEY_Q){
+			//movement with crate
 			if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].id==8 && pModel->map2[pModel->x-2][pModel->y].go_through){
 	  				pModel->temp2=pModel->map2[pModel->x-2][pModel->y];
 	  				pModel->map2[pModel->x-2][pModel->y]=pModel->map2[pModel->x-1][pModel->y];
@@ -197,23 +203,27 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x--;
 	  				pModel->cam_x--;
-	  				pModel->crate_score+=1;
+	  				pModel->score+=1;
 	  		}
-			else if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){
+	  		//movement
+			else if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2){
 	  			pModel->x--;
 	  			pModel->cam_x--;
 	  		}
+	  		//movement with map border and crate
 	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].id==8 && pModel->map2[pModel->x-2][pModel->y].go_through){
 	  				pModel->temp2=pModel->map2[pModel->x-2][pModel->y];
 	  				pModel->map2[pModel->x-2][pModel->y]=pModel->map2[pModel->x-1][pModel->y];
 	  				pModel->map2[pModel->x-1][pModel->y]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x--;
-	  				pModel->crate_score+=1;
+	  				pModel->score+=1;
 	  		}
+	  		//movement with map border
 	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].go_through ){
 				pModel->x--;
 			}
+			//interaction with monster
 			if(pModel->map2[pModel->x][pModel->y].id==10 && pModel->p1.health_point>0 ){
 				if( pModel->p1.inventory.have_sword){
 					pModel->map2[pModel->x][pModel->y].name="🌱";
@@ -226,25 +236,31 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 			}
 		}
 		if(pEvt->code == KEY_E_LOWER||pEvt->code == KEY_E){
+			//take flower
 			if(pModel->map2[pModel->x][pModel->y].id==1 && pModel->p1.inventory.flower_num<10 && pModel->map2[pModel->x][pModel->y].take){
 				pModel->map2[pModel->x][pModel->y].name="🍂";
 				pModel->map2[pModel->x][pModel->y].take=0;
 				pModel->p1.inventory.flower_num++;
 				pModel->score+=20;
 			}
+			//take fish
 			if(pModel->map2[pModel->x][pModel->y].id==7 && pModel->p1.inventory.fish_num<3 && pModel->map2[pModel->x][pModel->y].take){
 				pModel->map2[pModel->x][pModel->y].name="💧";
 				pModel->map2[pModel->x][pModel->y].take=0;
 				pModel->p1.inventory.fish_num++;
 				pModel->score+=50;
 			}
+			//check npc
 			if(pModel->map2[pModel->x][pModel->y].id==5 ){
+				//quest 1
 				if(pModel->p1.quest_advancement==0){
 					if(pModel->map2[pModel->x][pModel->y].npc1.flower_num<FLOWERREQ){
+						//give flowers to npc
 						while(pModel->p1.inventory.flower_num!=0 && pModel->map2[pModel->x][pModel->y].npc1.flower_num<FLOWERREQ){
 							pModel->map2[pModel->x][pModel->y].npc1.flower_num++;
 							pModel->p1.inventory.flower_num--;
 						}
+						//advanced in quest
 						if(pModel->map2[pModel->x][pModel->y].npc1.flower_num==FLOWERREQ){
 							pModel->p1.quest_advancement++;
 							pModel->p1.inventory.have_pickaxe=1;
@@ -253,12 +269,15 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 					}
 					
 				}
+				//quest 2
 				if(pModel->p1.quest_advancement==1){
 					if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ1){
+						//give minerals to npc
 						while(pModel->p1.inventory.ore_mineral!=0 && pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ1){					
 							pModel->map2[pModel->x][pModel->y].npc1.ore_mineral++;
 							pModel->p1.inventory.ore_mineral--;
 						}
+						//advanced in quest and you can swim
 						if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral==MINERALREQ1){
 							pModel->p1.quest_advancement++;
 							for(int i=0;i<SIZEMAP;i++){
@@ -273,14 +292,15 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 						}
 					}
 				}
+				//quest 3
 				if(pModel->p1.quest_advancement==2){
 					if(pModel->map2[pModel->x][pModel->y].npc1.fish_num<FISHREQ){
-						debug("+");
+						//give fish to npc
 						while(pModel->p1.inventory.fish_num!=0 && pModel->map2[pModel->x][pModel->y].npc1.fish_num<FISHREQ){
-							debug("+");
 							pModel->map2[pModel->x][pModel->y].npc1.fish_num++;
 							pModel->p1.inventory.fish_num--;
 						}
+						//quest advanced
 						if(pModel->map2[pModel->x][pModel->y].npc1.fish_num==FISHREQ){
 							pModel->score+=1000;
 							pModel->p1.quest_advancement++;
@@ -290,12 +310,15 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 			      }
 						
 			}
+			//quest forger
 			if(pModel->map2[pModel->x][pModel->y].id==9){
 				if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ2){
+					//give minerals to npc
 					while(pModel->p1.inventory.ore_mineral!=0 && pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ2){
 							pModel->map2[pModel->x][pModel->y].npc1.ore_mineral++;
 							pModel->p1.inventory.ore_mineral--;
 					}
+					//give you sword
 					if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral==5){
 						pModel->p1.inventory.have_sword=1;
 						pModel->score+=1000;
@@ -307,6 +330,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 			}
 		}
 		if(pEvt->code ==  KEY_A_LOWER ||pEvt->code == KEY_A){
+			//break rock
 			if(pModel->map2[pModel->x][pModel->y-1].brk && pModel->p1.inventory.ore_mineral<5 && pModel->p1.inventory.have_pickaxe){
 				pModel->map2[pModel->x][pModel->y-1].name="💨";
 				pModel->map2[pModel->x][pModel->y-1].go_through=1;
@@ -316,6 +340,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 			}
 		}
 		if(pEvt->code == KEY_M_LOWER){
+			//save
 			saveModel(pModel, "save.bin");
 		}					
 	}
@@ -325,7 +350,9 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
         Model* pModel = (Model*)pUserData;
+        //time start when a game is launch
         if(pModel->game_status==5){
+        	//timer
 		    pModel->elapsed+=1;
 		    if(pModel->elapsed==100){
 		        pModel->secglob+=1;
@@ -340,6 +367,7 @@ int update(void* pUserData, Screen* pScreen, unsigned long deltaTime){
 void draw(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
 	int id = 2;
+	//transform number of items in string to draw
 	char buffer[4];
 	char buffer2[4];
 	char buffer3[4];
@@ -373,33 +401,38 @@ void draw(void* pUserData, Screen* pScreen){
         }
         
 	if(pModel->game_status!=5){
+		//draw the menu
 		draw_menu(pScreen, pModel, id, pModel->game_status);
 	}
-	
+	//end quest
 	else if(pModel->p1.quest_advancement==3){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you completed all quests !",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
+	//end crate
 	else if( pModel->crate_score>=CRATE_SCORELIM){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you moved a crate a looooooooooooooooot of time!",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
+	//end score
 	else if( pModel->score>=SCORE_LIMIT){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you reached the limit of the score !",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
+	//end hp
 	else if(pModel->p1.health_point==0){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"YOU DIED (insert dark souls death sound)",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
+	//end time
 	else if(pModel->min>=MIN_MAX && pModel->sec>=SEC_MAX){
 	        clear();
 	        drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"Time is ruuniiiiing ouuut",0);
@@ -408,6 +441,7 @@ void draw(void* pUserData, Screen* pScreen){
 		pModel->end=1;
 	}
 	else{
+		//map drawing
 		for(int i=0; i<CAMERA_SIZE; i++){
 			for(int j=0; j<CAMERA_SIZE; j++){
 				int dif_x = pModel->x - pModel->cam_x - CAMERA_SIZE/2;
@@ -425,9 +459,11 @@ void draw(void* pUserData, Screen* pScreen){
 			}
 			
 		}
+		//health drawing
 		for(int i=0; i<pModel->p1.health_point*3;i=i+3){
 			drawText(pScreen,0+i,3,"❤️",0);
 		}
+		//text npc farmer
 		if(pModel->map2[pModel->x][pModel->y].id==5){
 			if(pModel->p1.quest_advancement==0){
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
@@ -445,6 +481,7 @@ void draw(void* pUserData, Screen* pScreen){
 				drawText(pScreen, CAMERA_SIZE+11,CAMERA_SIZE+10, " fishes and you will be blessed by the forest", 0);
 			}	
 		}
+		//test npc forger
 		if(pModel->map2[pModel->x][pModel->y].id==9){
 			if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<5){
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
@@ -454,7 +491,8 @@ void draw(void* pUserData, Screen* pScreen){
 			else{
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE + 10, "thank you little rabbit here's your sword", 0);
 			}
-		}	
+		}
+		//coordonate,score and inventory drawing
 		drawText(pScreen,0,30,buffer10,0);
 		drawText(pScreen,1,30,":",0);
 		drawText(pScreen,3,30,buffer9,0);
@@ -483,7 +521,6 @@ void draw(void* pUserData, Screen* pScreen){
 		for(int i=0; i<=20; i+=4){
 			drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE+1,(pScreen->height-CAMERA_SIZE)/2+i,9,'-',0);
 		}
-		//drawLine(pScreen, (pScreen->width-CAMERA_SIZE)/2+CAMERA_SIZE*2+1,(pScreen->height-CAMERA_SIZE)/2+CAMERA_SIZE-1,9,'-',0); 
 	}
 }
 

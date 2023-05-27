@@ -121,6 +121,7 @@ void replaceWithBiomes(float **tab, Surface **map){
 }
 
 void replaceWithBiomes2(Surface **map){
+	//create all Surface
 	Surface rock;
 	Surface farmer;
 	Surface tree;
@@ -165,22 +166,22 @@ void replaceWithBiomes2(Surface **map){
 	mob.id=10;
 	for(int i = 0; i < SIZEMAP; i++){
 		for (int j = 0; j < SIZEMAP; j++){
+			//Place randomly surface
 			if((map[i][j].name == "🌱" || map[i][j].name == "⏳") && (rand() % 100 < 3)){
 				map[i][j] = rock; // Rock
 			}
 			if(map[i][j].name == "🌱" && rand() % 100 < 3){
-				map[i][j] = tree;
+				map[i][j] = tree; // Tree
 			}
 			if(map[i][j].name == "💧" && rand() % 100 < 2){
-				map[i][j] = fish;
+				map[i][j] = fish; // Fish
 			}
 			if(map[i][j].name == "🌱" && rand() % 100 < 1){
-				map[i][j] = mob;
+				map[i][j] = mob; // Monster
 			}
 			if(map[i][j].name == "🌱" && rand() % 500 < 2){
-				map[i][j] = crate;
+				map[i][j] = crate; // Crate
 			}
-			//debug("%s", map[i][j].name);
 		}
 	}
 	
@@ -240,17 +241,19 @@ void create_map(Model *pModel){
 	replaceWithBiomes(pModel->map, pModel->map2);
 	replaceWithBiomes2(pModel->map2);
 	
+	//place correctly if spawn in water
 	while(pModel->map2[pModel->x][pModel->y].go_through!=1 || pModel->map2[pModel->x][pModel->y].id==10){ 
-		//debug("+");
 		pModel->map2[pModel->x][pModel->y++];
 		pModel->map2[pModel->x][pModel->cam_y++];
 	}
+	//if it's a new map
 	if(pModel->x_farmer==0 && pModel->y_farmer==0){
 		pModel->map2[pModel->x-1][pModel->y]=farmer;
 		pModel->map2[pModel->x+1][pModel->y]=forger;
 		pModel->x_farmer=pModel->x;
 		pModel->y_farmer=pModel->y;
 	}
+	//if it's a loaded map
 	else{
 		pModel->map2[pModel->x_farmer-1][pModel->y_farmer]=farmer;
 		pModel->map2[pModel->x_farmer+1][pModel->y_farmer]=forger;
