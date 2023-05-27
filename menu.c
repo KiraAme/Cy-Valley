@@ -29,6 +29,7 @@ void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 				}
 				else{
 					//map creation
+					create_map(pModel);
 					pModel->game_status = 5;
 					pModel->starttimestamp = time(NULL);
 				}
@@ -38,31 +39,7 @@ void menu(Screen* pScreen, Event* pEvt, Model* pModel){
 					pModel->game_status = 2;
 				}
 				else{
-					/*FILE* in = fopen("save.txt", "rb");
-					if(in == NULL){
-						debug("ok");
-					}
-					
-
-					fread(pModel, sizeof(Model), 1, in);
-    
-					for (int i = 0; i < SIZEMAP; i++){
-						fread(pModel->map[i], sizeof(float), SIZEMAP, in);
-					}
-
-					
-					for (int i = 0; i < SIZEMAP; i++){
-						fread(pModel->map2[i], sizeof(Surface), SIZEMAP, in);
-					}
-					
-		 			for (int i = 0; i < SIZEMAP; i++){
-						for (int j = 0; j < SIZEMAP; j++){
-							debug("%s", pModel->map2[i][j]);
-						}
-						debug("\n");
-					}
-    		
-					fclose(in);*/
+					loadModel(pModel, "save.bin");
 				}		
 				break;
 			case 18:

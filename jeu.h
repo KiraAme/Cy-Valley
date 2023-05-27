@@ -67,6 +67,8 @@ typedef struct{
   int min;
   int sec;
   int end;
+  int x_farmer;
+  int y_farmer;
 } Model;
 
 
@@ -77,6 +79,7 @@ double smoothstep(double t);
 double noise(double x, double y, int permutation[], double gradient[TABLE_SIZE][2]);
 void replaceWithBiomes(float **tab, Surface **map);
 void replaceWithBiomes2(Surface **map);
+void create_map(Model *pModel);
 
 void menu(Screen* pScreen, Event* pEvt, Model* pModel);
 void draw_menu(Screen* pScreen, Model* pModel, int id, char status);
@@ -85,3 +88,6 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt);
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime);
 void draw(void* pUserData, Screen* pScreen);
 void finish(void* pUserData);
+
+void saveModel(Model *model, char *filename);
+void loadModel(Model *model, char *filename);

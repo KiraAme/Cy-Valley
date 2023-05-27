@@ -25,35 +25,17 @@ void init(void* pUserData, Screen* pScreen){
 	pModel->sec= 0;
     pModel->min= 0;
     
+    //
+    pModel->seed=time(NULL);
+    
 	//Player's coordinates when spawned	
 	pModel->x = SIZEMAP/2;
 	pModel->y = SIZEMAP/2;
 	pModel->cam_x = pModel->x-CAMERA_SIZE/2;
 	pModel->cam_y = pModel->y-CAMERA_SIZE/2;
+	pModel->x_farmer = 0;
+	pModel->y_farmer = 0;
 	
-	//farmer init
-	Surface farmer;
-	farmer.name="👨‍🌾";
-	farmer.brk=0;
-	farmer.take=0;
-	farmer.push=0;
-	farmer.go_through=1;
-	farmer.npc1.is_npc=1;
-	farmer.npc1.flower_num=0;
-	farmer.npc1.fish_num=0;
-	farmer.npc1.ore_mineral=0;
-	farmer.id=5;
-	
-	//forger init
-	Surface forger;
-	forger.name="👷‍♂️";
-	forger.brk=0;
-	forger.push=0;
-	forger.take=1;
-	forger.go_through=1;
-	forger.npc1.is_npc=1;
-	forger.npc1.ore_mineral=0;
-	forger.id=9;
 	//The y arrow's coordinates 
 	pModel->arrow_position = 6;
 	
@@ -65,54 +47,6 @@ void init(void* pUserData, Screen* pScreen){
 	
 	//Game status (1 = Main menu, 2 = Settings, 3 = Load menu, 4 = New game or load, 5 = Game)
 	pModel->game_status = 1;
-	//map creation
-	int permutation[TABLE_SIZE];
-	double gradient[TABLE_SIZE][2];
-	
-	srand(time(NULL));
-	pModel->seed = rand();
-	srand(pModel->seed);
-	
-	initialize_permutation_table(permutation);
-	initialize_gradient_table(gradient);
-	
-	pModel->map = (float**)malloc(SIZEMAP*sizeof(float*));
-  	for(int i=0; i<SIZEMAP; i++){
-       		 pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
-  	}
-    
-    pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
-   	for(int i=0; i<SIZEMAP; i++){
-		pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
-    }
-    	
-	double i, j;
-	for(i=0; i<SIZEMAP; i++){
-		for(j=0; j<SIZEMAP; j++){
-			pModel->map[(int)i][(int)j] = (int)noise(i/15, j/15, permutation, gradient);
-			/*if(i%2==0){
-				pModel->map2[i][j]="💧";
-			}
-			else if(j%2==0){
-				pModel->map2[i][j]="🌱";
-			}
-			else{
-				pModel->map2[i][j]="⏳";
-			}*/
-		}
-	}
-	
-	replaceWithBiomes(pModel->map, pModel->map2);
-	replaceWithBiomes2(pModel->map2);
-	
-	while(pModel->map2[pModel->x][pModel->y].go_through!=1 || pModel->map2[pModel->x][pModel->y].id==10){ 
-		//debug("+");
-		pModel->map2[pModel->x][pModel->y++];
-		pModel->map2[pModel->x][pModel->cam_y++];
-	}
-	
-	pModel->map2[pModel->x-1][pModel->y]=farmer;
-	pModel->map2[pModel->x+1][pModel->y]=forger;
 }
 
 void event(void* pUserData, Screen* pScreen, Event* pEvt){
@@ -386,40 +320,8 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 			}
 		}
 		if(pEvt->code == KEY_M_LOWER){
-			FILE* out = fopen("save.txt", "wb");
-			fwrite(pModel, sizeof(Model), 1, out);
-
-			// Écriture du tableau map
-			for (int i = 0; i < SIZEMAP; i++){
-    			fwrite(pModel->map[i], sizeof(float), SIZEMAP, out);
-    		}
-
-			// Écriture du tableau map2
-			for (int i = 0; i < SIZEMAP; i++){
-				fwrite(pModel->map2[i], sizeof(Surface), SIZEMAP, out);
-			}
-			
-			fclose(out);
-		}
-		if(pEvt->code == KEY_N_LOWER){
-			FILE* in = fopen("save.txt", "rb");
-			if(in == NULL){
-				debug("ok");
-			}
-			
-			fread(pModel, sizeof(Model), 1, in);		
-			
-			for (int i = 0; i < SIZEMAP; i++){
-				fread(pModel->map[i], sizeof(float), SIZEMAP, in);
-			}
-			
-			for (int i = 0; i < SIZEMAP; i++){
-				fread(pModel->map2[i], sizeof(Surface), SIZEMAP, in);
-			}
-    		
-			fclose(in);
-		}			
-				
+			saveModel(pModel, "save.bin");
+		}					
 	}
 	
 	clear();
@@ -594,13 +496,7 @@ int main() {
 	
 	gameLoop(createGame(100, 40, &model, &cb, 0));
 	
-	for(int i=0; i<SIZEMAP; i++)
-		free(model.map[i]);
-	free(model.map);
-	
-	for(int i=0; i<SIZEMAP; i++)
-		free(model.map2[i]);
-	free(model.map2);
+
 	  
 	return 0; 
 }		
