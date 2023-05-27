@@ -167,19 +167,21 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  			pModel->x++;
 	  			pModel->cam_x++;
 	  		}
-	  		//movement with map border and crate
-	  		else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].id==8 && pModel->map2[pModel->x+2][pModel->y].go_through){
+	  		//movement with map border 
+	  		else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].go_through ){
+				pModel->x++;
+			}
+			//border and crate
+	  		else if(pModel->x<SIZEMAP - 2){
+	  		  if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].id==8 && pModel->map2[pModel->x+2][pModel->y].go_through){
 	  				pModel->temp2=pModel->map2[pModel->x+2][pModel->y];
 	  				pModel->map2[pModel->x+2][pModel->y]=pModel->map2[pModel->x+1][pModel->y];
 	  				pModel->map2[pModel->x+1][pModel->y]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x++;
-	  				pModel->score+=1;
+	  				pModel->crate_score+=1;
+	  		  }
 	  		}
-	  		//movement with map border
-            else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].go_through ){
-				pModel->x++;
-			}
 			//interaction with monster
 			if(pModel->map2[pModel->x][pModel->y].id==10 && pModel->p1.health_point>0 ){
 				if( pModel->p1.inventory.have_sword){
@@ -210,19 +212,21 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  			pModel->x--;
 	  			pModel->cam_x--;
 	  		}
-	  		//movement with map border and crate
-	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].id==8 && pModel->map2[pModel->x-2][pModel->y].go_through){
+	  		//movement with map border 
+	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].go_through ){
+				pModel->x--;
+			}
+			//movement with map border and crate
+	  		else if(pModel->x>1){
+	  		  if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].id==8 && pModel->map2[pModel->x-2][pModel->y].go_through){
 	  				pModel->temp2=pModel->map2[pModel->x-2][pModel->y];
 	  				pModel->map2[pModel->x-2][pModel->y]=pModel->map2[pModel->x-1][pModel->y];
 	  				pModel->map2[pModel->x-1][pModel->y]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x--;
-	  				pModel->score+=1;
+	  				pModel->crate_score+=1;
+	  		  }
 	  		}
-	  		//movement with map border
-	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].go_through ){
-				pModel->x--;
-			}
 			//interaction with monster
 			if(pModel->map2[pModel->x][pModel->y].id==10 && pModel->p1.health_point>0 ){
 				if( pModel->p1.inventory.have_sword){
