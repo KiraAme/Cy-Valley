@@ -5,7 +5,7 @@ LIB      = GameRGR2
 INC_DIR  = inc
 SRC_DIR  = src
 LIB_DIR  = lib
-TEST_EXE = test
+TEST_EXE = cy_valley
 CURSES   = ncursesw
 SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)
@@ -38,7 +38,7 @@ $(LIB_DIR)/lib$(LIB).so : $(LIB_DIR)/lib$(LIB).o $(LIB_DIR)/utils.o $(LIB_DIR)/e
 # MAIN
 #-----------------------------------------
 
-$(BUILD_DIR)/%.o: %.c jeu.h $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.c game.h $(BUILD_DIR)
 	gcc -c $< -o $@
 
 $(TEST_EXE) : $(OBJ2) $(LIB_DIR)/lib$(LIB).so
