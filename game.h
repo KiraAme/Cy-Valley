@@ -17,7 +17,7 @@
 #define MIN_MAX 10
 #define SEC_MAX 0
 #define SCORE_LIMIT 10000
-#define CRATE_SCORELIM 10
+#define CRATE_SCORELIM 1000
 
 typedef struct{
 	int is_npc;
