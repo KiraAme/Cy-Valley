@@ -19,14 +19,14 @@
 #define SCORE_LIMIT 10000
 #define CRATE_SCORELIM 1000
 
-typedef struct{
+typedef struct{ //npc structure
 	int is_npc;
 	int flower_num;
 	int ore_mineral;
 	int fish_num;
 }Npc;
 
-typedef struct{
+typedef struct{ //Surface structure
   char *name;
   int brk ;
   int take ;
@@ -36,7 +36,7 @@ typedef struct{
   int id;
 } Surface;
 
-typedef struct{
+typedef struct{ // Inventory structure
 	int flower_num;
 	int have_pickaxe;
 	int have_sword;
@@ -45,13 +45,13 @@ typedef struct{
 
 } Inv;
 
-typedef struct{
+typedef struct{ //Player strcture
 	int health_point;
 	Inv inventory;
 	int quest_advancement;
 } Player;
 
-typedef struct{
+typedef struct{ //Game's model structure
   int x;
   int y;
   int cam_x;
@@ -77,6 +77,7 @@ typedef struct{
 } Model;
 
 
+//Calling functions .c files
 void initialize_permutation_table(int permutation[]);
 void initialize_gradient_table(double gradient[TABLE_SIZE][2]);
 double dot_product(double x1, double y1, double x2, double y2);
