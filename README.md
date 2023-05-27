@@ -3,7 +3,7 @@ Projet de fin d'année préing 1 info 2
 
 ENG Version
 ------------
-To be able to run Cy Valley, you have to write in the shell "export LD_LIBRARY_PATH=lib", then compil the files with the command make and execute it with ./main
+To be able to run Cy Valley, you have to write in the shell "export LD_LIBRARY_PATH=lib", then compil the files with the command make and execute it with ./cy_valley
 How to play to this game ? You've to use the following keyboard's keys :
 - z = Up
 - s = Down
@@ -24,7 +24,7 @@ You start the game with 3 hearts (health point), and you have 10 minutes to fini
 
 FR Version
 -----------
-Pour être capable de démarer le jeu, il faut écrire dans le terminal "export LD_LIBRARY_PATH=lib", make puis ./main
+Pour être capable de démarer le jeu, il faut écrire dans le terminal "export LD_LIBRARY_PATH=lib", make puis ./cy_valley
 
 
 Comment y jouer ? Il vous suffit d'utiliser les touches suivantes :
