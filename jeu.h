@@ -10,10 +10,10 @@
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 21
 #define SIZEMAP 21
-#define FLOWERREQ 1
-#define MINERALREQ1 1
+#define FLOWERREQ 20
+#define MINERALREQ1 10
 #define MINERALREQ2 15
-#define FISHREQ 1
+#define FISHREQ 9
 #define MIN_MAX 5
 #define SEC_MAX 5
 
