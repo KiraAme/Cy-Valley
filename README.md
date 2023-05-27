@@ -15,8 +15,6 @@ How to play to this game ? You've to use the following keyboard's keys :
 - a = To use the pickaxe on a rock above you
 - m = To save the game 
 
-\\\Those keyboard's keys can be changed in the setting menu according to your desires//
-
 
 You start the game with 3 hearts (health point), and you have 10 minutes to finish the game before the time is running out. You can win on 2 different ways : 
 - Reach the score limit of 10 000 points
@@ -37,8 +35,6 @@ Comment y jouer ? Il vous suffit d'utiliser les touches suivantes :
 - e = Prendre une fleur/Prendre un poisson/Interagir avec le pnj ou le forgeron en étant sur la surface en question
 - a = Utiliser la pioche sur un rocher au-dessus de vous
 - m = Sauvegarder le jeu
-
-\\\Vous pouvez bien sûr modifier ces touches selon vos envies en accédant au menu "paramètres"//
 
 
 Vous commencer le jeu avec 3 coeurs (points de vie), et vous avez 10 minutes pour finir le jeu. Après ce temps limite, vous avez perdu. 
