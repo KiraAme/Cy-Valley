@@ -124,7 +124,7 @@ void draw2(void* pUserData, Screen* pScreen){
 		}
 		//test npc forger
 		if(pModel->map2[pModel->x][pModel->y].id==9){
-			if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<5){
+			if(pModel->map2[pModel->x][pModel->y].npc1.ore_mineral<MINERALREQ2){
 			        int mineralq2upd=MINERALREQ2-pModel->map2[pModel->x][pModel->y].npc1.ore_mineral;
 			        sprintf(buffer13,"%d",mineralq2upd);
 				drawText(pScreen, CAMERA_SIZE,CAMERA_SIZE+10, "bring me ", 0);
