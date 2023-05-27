@@ -9,13 +9,14 @@
 
 #define TABLE_SIZE  256
 #define CAMERA_SIZE 31
-#define SIZEMAP 1000
+#define SIZEMAP 100
 #define FLOWERREQ 1
 #define MINERALREQ1 1
 #define MINERALREQ2 15
 #define FISHREQ 1
 #define MIN_MAX 5
 #define SEC_MAX 5
+#define SCORE_LIMIT 10000
 
 typedef struct{
 	int is_npc;
@@ -62,10 +63,13 @@ typedef struct{
   int seed;
   Surface **map2;
   int score;
+  int cratescore;
   Surface temp1;
   Surface temp2;
   int min;
   int sec;
+  int elapsed;
+  int timer;
   int end;
 } Model;
 

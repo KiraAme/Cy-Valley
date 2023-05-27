@@ -13,6 +13,8 @@ void init(void* pUserData, Screen* pScreen){
 	pModel->p1.inventory.have_pickaxe=0;
 	pModel->p1.inventory.have_sword=0;
 	pModel->score=0;
+	pModel->cratescore=0;
+	pModel->timer=MIN_MAX*60+SEC_MAX;
 	
 	//
 	pModel->temp1.name="🌱";
@@ -25,8 +27,8 @@ void init(void* pUserData, Screen* pScreen){
 	pModel->temp1.id=1;
 	
 	//
-	pModel->sec= 0;
-    pModel->min= 0;
+	pModel->sec= SEC_MAX;
+        pModel->min= MIN_MAX;
         
 	//Player's coordinates when spawned	
 	pModel->x = SIZEMAP/2;
@@ -36,7 +38,7 @@ void init(void* pUserData, Screen* pScreen){
 	
 	//farmer init
 	Surface farmer;
-	farmer.name="👨‍🌾";
+	farmer.name="👨";
 	farmer.brk=0;
 	farmer.take=0;
 	farmer.push=0;
@@ -49,7 +51,7 @@ void init(void* pUserData, Screen* pScreen){
 	
 	//forger init
 	Surface forger;
-	forger.name="👷‍♂️";
+	forger.name="👷";
 	forger.brk=0;
 	forger.push=0;
 	forger.take=1;
@@ -80,14 +82,14 @@ void init(void* pUserData, Screen* pScreen){
 	initialize_gradient_table(gradient);
 	
 	pModel->map = (float**)malloc(SIZEMAP*sizeof(float*));
-    for (int i=0; i<SIZEMAP; i++) {
-        pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
-    }
+        for (int i=0; i<SIZEMAP; i++) {
+          pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
+        }
     
-    pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
-    for (int i=0; i<SIZEMAP; i++) {
-        pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
-    }
+        pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
+        for (int i=0; i<SIZEMAP; i++) {
+          pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
+        }
 
 	double i, j;
 	for(i=0; i<SIZEMAP; i++){
@@ -108,7 +110,7 @@ void init(void* pUserData, Screen* pScreen){
 	replaceWithBiomes(pModel->map, pModel->map2);
 	replaceWithBiomes2(pModel->map2);
 	
-	while(pModel->map2[pModel->x][pModel->y].go_through!=1){ 
+	while(pModel->map2[pModel->x][pModel->y].go_through!=1 || pModel->map2[pModel->x][pModel->y].id==10){ 
 		//debug("+");
 		pModel->map2[pModel->x][pModel->y++];
 		pModel->map2[pModel->x][pModel->cam_y++];
@@ -136,7 +138,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y++;
 	  				pModel->cam_y++;
-	  				pModel->score+=1;
+	  				pModel->cratescore+=1;
 	  		}
 	  		//movement 
 			else if(pModel->cam_y<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x][pModel->y+1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
@@ -150,7 +152,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x][pModel->y+1]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y++;
-	  			        pModel->score+=1;
+	  			        pModel->cratescore+=1;
 	  		}
 	  		//movement with map border
 	  		else if(pModel->y<SIZEMAP - 1 && pModel->map2[pModel->x][pModel->y+1].go_through ){
@@ -180,7 +182,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y--;
 	  				pModel->cam_y--;
-	  				pModel->score+=1;
+	  				pModel->cratescore+=1;
 	  		}
 	  		//movement
 			else if(pModel->cam_y>0 && pModel->map2[pModel->x][pModel->y-1].go_through  && (pModel->y - pModel->cam_y) == CAMERA_SIZE/2 ){	
@@ -194,7 +196,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x][pModel->y-1]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->y--;
-	  				pModel->score+=1;
+	  				pModel->cratescore+=1;
 	  		}
 	  		//movement with map border
 	  		else if(pModel->y>0 && pModel->map2[pModel->x][pModel->y-1].go_through ){
@@ -231,7 +233,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x++;
 	  				pModel->cam_x++;
-	  				pModel->score+=1;
+	  				pModel->cratescore+=1;
 	  		}
 			else if(pModel->cam_x<(SIZEMAP - CAMERA_SIZE) && pModel->map2[pModel->x+1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2 ){	
 	  			pModel->x++;
@@ -243,7 +245,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x+1][pModel->y]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x++;
-	  				pModel->score+=1;
+	  				pModel->cratescore+=1;
 	  		}
                         else if(pModel->x<SIZEMAP - 1 && pModel->map2[pModel->x+1][pModel->y].go_through ){
 				pModel->x++;
@@ -270,7 +272,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x--;
 	  				pModel->cam_x--;
-	  				pModel->score+=1;
+	  				pModel->cratescore+=1;
 	  		}
 			else if(pModel->cam_x>0 && pModel->map2[pModel->x-1][pModel->y].go_through  && (pModel->x - pModel->cam_x) == CAMERA_SIZE/2  ){
 	  			pModel->x--;
@@ -282,7 +284,7 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 	  				pModel->map2[pModel->x-1][pModel->y]=pModel->temp1;
 	  				pModel->temp1=pModel->temp2;
 	  				pModel->x--;
-	  				pModel->score+=1;
+	  				pModel->cratescore+=1;
 	  		}
 	  		else if(pModel->x>0 && pModel->map2[pModel->x-1][pModel->y].go_through ){
 				pModel->x--;
@@ -387,7 +389,57 @@ void event(void* pUserData, Screen* pScreen, Event* pEvt){
 				pModel->p1.inventory.ore_mineral++;
 				pModel->score+=30;
 			}
-		}				
+		}
+		/*if(pEvt->code == KEY_M_LOWER){
+			FILE* out = fopen("save.txt", "wb");
+			fwrite(pModel, sizeof(Model), 1, out);
+
+			// Écriture du tableau map
+			for (int i = 0; i < SIZEMAP; i++){
+    			fwrite(pModel->map[i], sizeof(float), SIZEMAP, out);
+    		        }
+
+			// Écriture du tableau map2
+			for (int i = 0; i < SIZEMAP; i++){
+				fwrite(pModel->map2[i], sizeof(Surface), SIZEMAP, out);
+			}
+			
+			fclose(out);
+		}
+		if(pEvt->code == KEY_N_LOWER){
+			FILE* in = fopen("save.txt", "rb");
+			if(in == NULL){
+				exit(110);
+			}
+			
+			fread(pModel, sizeof(Model), 1, in);
+			//debug("ok");
+                        ///debug("ok");
+		        //free(pModel->map[0]);
+	                //free(pModel->map);
+	
+	                //debug("ok");
+		        //free(pModel->map2[0]);
+	                //free(pModel->map2);
+	                pModel->map = (float**)malloc(SIZEMAP*sizeof(float*));
+                        debug("ok");
+                        pModel->map2 = (Surface**)malloc(SIZEMAP*sizeof(Surface*));
+			for (int i = 0; i < SIZEMAP; i++){
+			        debug("ok");
+			        pModel->map[i] = (float*)malloc(SIZEMAP*sizeof(float));
+				fread(pModel->map[i], sizeof(float), SIZEMAP, in);
+			}
+			
+			for (int i = 0; i < SIZEMAP; i++){
+			        debug("ok");
+			        
+			        pModel->map2[i] = (Surface*)malloc(SIZEMAP*sizeof(Surface));
+				fread(pModel->map2[i], sizeof(Surface), SIZEMAP, in);
+			      
+			}
+    		
+			fclose(in);
+		}*/
 				
 	}
 	
@@ -429,10 +481,11 @@ void draw(void* pUserData, Screen* pScreen){
 	sprintf(buffer13,"%d",MINERALREQ2);
 	sprintf(buffer14,"%d",FISHREQ);
 	long display_timestamp = time(NULL);
-	int elapsed = display_timestamp - pModel->starttimestamp;
-	pModel->sec = elapsed%60;
-        pModel->min= elapsed/60;
-        if(pModel->min==0 && pModel->sec==0){
+	pModel->elapsed = display_timestamp - pModel->starttimestamp;
+
+	pModel->sec = (pModel->timer - pModel->elapsed)%60;
+        pModel->min= (pModel->timer - pModel->elapsed)/60;
+        if(pModel->min==MIN_MAX && pModel->sec==SEC_MAX){
                 clear();
         }
         
@@ -446,8 +499,14 @@ void draw(void* pUserData, Screen* pScreen){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
-	else if(pModel->score>=10000){
+	else if(pModel->score>=SCORE_LIMIT){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you reached the limit of the score !",0);
+		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
+		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
+		pModel->end=1;
+	}
+	else if( pModel->cratescore>=10){
+		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"GG you moved a crate a looooot of times !",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
@@ -458,13 +517,13 @@ void draw(void* pUserData, Screen* pScreen){
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
 	}
-	/*else if(pModel->min>=MIN_MAX && pModel->sec>=SEC_MAX){
+	else if(pModel->min<=0 && pModel->sec<=0){
 	        clear();
 	        drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2,"Time is ruuniiiiing ouuut",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2,(pScreen->height-CAMERA_SIZE)/2+10,"Your final score =",0);
 		drawText(pScreen,(pScreen->width-CAMERA_SIZE)/2+19,(pScreen->height-CAMERA_SIZE)/2+10,buffer8,0);
 		pModel->end=1;
-	}*/
+	}
 	else{
 		
 		for(int i=0; i<CAMERA_SIZE; i++){
@@ -563,6 +622,14 @@ int main() {
 	
 	
 	gameLoop(createGame(100, 50, &model, &cb, 0));
-	  
+	for(int i=0; i<SIZEMAP; i++){
+		free(model.map[i]);
+	}
+	free(model.map);
+	
+	for(int i=0; i<SIZEMAP; i++){
+		free(model.map2[i]);
+        }
+	free(model.map2);
 	return 0; 
 }
