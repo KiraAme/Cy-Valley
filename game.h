@@ -19,14 +19,14 @@
 #define SCORE_LIMIT 10000
 #define CRATE_SCORELIM 1000
 
-typedef struct{ //npc structure
+typedef struct{
 	int is_npc;
 	int flower_num;
 	int ore_mineral;
 	int fish_num;
 }Npc;
 
-typedef struct{ //Surface structure
+typedef struct{
   char *name;
   int brk ;
   int take ;
@@ -36,7 +36,7 @@ typedef struct{ //Surface structure
   int id;
 } Surface;
 
-typedef struct{ // Inventory structure
+typedef struct{
 	int flower_num;
 	int have_pickaxe;
 	int have_sword;
@@ -45,13 +45,13 @@ typedef struct{ // Inventory structure
 
 } Inv;
 
-typedef struct{ //Player strcture
+typedef struct{
 	int health_point;
 	Inv inventory;
 	int quest_advancement;
 } Player;
 
-typedef struct{ //Game's model structure
+typedef struct{
   int x;
   int y;
   int cam_x;
@@ -77,7 +77,6 @@ typedef struct{ //Game's model structure
 } Model;
 
 
-//Calling functions .c files
 void initialize_permutation_table(int permutation[]);
 void initialize_gradient_table(double gradient[TABLE_SIZE][2]);
 double dot_product(double x1, double y1, double x2, double y2);
@@ -93,6 +92,11 @@ void draw_menu(Screen* pScreen, Model* pModel, int id, char status);
 void event(void* pUserData, Screen* pScreen, Event* pEvt);
 int update(void* pUserData, Screen* pScreen, unsigned long deltaTime);
 void draw(void* pUserData, Screen* pScreen);
+void finish(void* pUserData);
+
+void event2(void* pUserData, Screen* pScreen, Event* pEvt);
+int update2(void* pUserData, Screen* pScreen, unsigned long deltaTime);
+void draw2(void* pUserData, Screen* pScreen);
 void finish(void* pUserData);
 
 void saveModel(Model *model, char *filename);

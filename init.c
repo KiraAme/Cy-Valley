@@ -1,7 +1,6 @@
-//export LD_LIBRARY_PATH=lib
 #include "game.h"
 
-void init(void* pUserData, Screen* pScreen){
+void init2(void* pUserData, Screen* pScreen){
 	Model* pModel = (Model*)pUserData;
 	//Player's inventory and health when spawned
 	pModel->p1.health_point=3;
@@ -43,27 +42,3 @@ void init(void* pUserData, Screen* pScreen){
 	//Game status (1 = Main menu, 2 = Settings, 3 = Load menu, 4 = New game or load, 5 = Game)
 	pModel->game_status = 1;
 }
-
-void finish(void* pUserData){
-	
-}
-
-
-int main() {
-	Model model;
-	Callbacks cb;
-	cb.cbInit= init;        
-	cb.cbEvent= event2;        
-	cb.cbUpdate= update2;
-	cb.cbDraw= draw2;
-	cb.cbFinish= finish;
-	
-	
-	
-	gameLoop(createGame(100, 40, &model, &cb, 0));
-	
-
-	  
-	return 0; 
-}		
-				
