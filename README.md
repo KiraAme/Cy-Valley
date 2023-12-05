@@ -24,7 +24,7 @@ You start the game with 3 hearts (health point), and you have 10 minutes to fini
 
 FR Version
 -----------
-Pour être capable de démarer le jeu, il faut écrire dans le terminal "export LD_LIBRARY_PATH=lib", make puis ./cy_valley
+Pour être capable de démarrer le jeu, il faut écrire dans le terminal "export LD_LIBRARY_PATH=lib", make puis ./cy_valley
 
 
 Comment y jouer ? Il vous suffit d'utiliser les touches suivantes :
@@ -41,7 +41,7 @@ Comment y jouer ? Il vous suffit d'utiliser les touches suivantes :
 
 Vous commencer le jeu avec 3 coeurs (points de vie), et vous avez 10 minutes pour finir le jeu. Après ce temps limite, vous avez perdu. 
 Pour gagner il suffit de remplir l'une des deux conditions : 
-- Atteindre le score limite de 10 0000 points
+- Atteindre le score limite de 10 000 points
 - Compléter les 3 quêtes en intéragissant avec le pnj
 - Pousser un certain nombre de fois pour gagner instantanément
                                                              
